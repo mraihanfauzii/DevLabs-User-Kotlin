@@ -7,9 +7,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    private const val baseUrl = ""
+    private const val baseUrl = "https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz/api/v1/"
 
-    fun getABCApiService(): ApiService {
+    fun getApiService(): ApiService {
         val loggingInterceptor = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         } else {
