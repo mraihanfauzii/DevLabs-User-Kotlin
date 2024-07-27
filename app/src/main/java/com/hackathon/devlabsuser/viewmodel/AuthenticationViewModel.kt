@@ -1,11 +1,11 @@
 package com.hackathon.devlabsuser.viewmodel
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hackathon.devlabsuser.api.ApiConfig
+import com.hackathon.devlabsuser.model.DeleteResponse
 import com.hackathon.devlabsuser.model.LoginRequest
 import com.hackathon.devlabsuser.model.LoginResponse
 import com.hackathon.devlabsuser.model.RegisterRequest
@@ -14,12 +14,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AuthenticationViewModel(application: Application) : AndroidViewModel(application) {
+class AuthenticationViewModel() : ViewModel() {
     private val _registerResponse = MutableLiveData<RegisterResponse>()
     val registerResponse : LiveData<RegisterResponse> = _registerResponse
 
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse : LiveData<LoginResponse> = _loginResponse
+
+    private val _logoutResponse = MutableLiveData<DeleteResponse>()
+    val logoutResponse : LiveData<DeleteResponse> = _logoutResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -66,11 +69,36 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
                 } else {
                     Log.e("LoginViewModel", "onFailure: ${response.message()}")
                     _loginResponse.value = response.body()
-                    _errorMessage.value = "Failed to login"
+                    _errorMessage.value = "Email dan password tidak sesuai!"
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("LoginViewModel", "onFailure: ${t.message.toString()}")
+                _errorMessage.value = "Failed to login"
+            }
+        })
+    }
+
+    fun logout(token: String) {
+        _isLoading.value = true
+        ApiConfig.getApiService().logout(token).enqueue(object : Callback<DeleteResponse> {
+            override fun onResponse(
+                call: Call<DeleteResponse>,
+                response: Response<DeleteResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _logoutResponse.value = response.body()
+                } else {
+                    Log.e("LoginViewModel", "onFailure: ${response.message()}")
+                    _logoutResponse.value = response.body()
+                    _errorMessage.value = "Failed to login"
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("LoginViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to login"

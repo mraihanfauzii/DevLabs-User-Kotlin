@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Izin Akses Kamera -->
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Izin Untuk Mengakses Penyimpanan, pada aplikasi ini untuk mengakses Galeri -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -19,6 +18,48 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DevlabsUser"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.main.profile.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.home.DetailArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.construction.InputDesignOrProgressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.payment.PaymentTutorialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.construction.ConstructionDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.architect.InputPortfolioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.architect.DetailPortfolioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.payment.PaymentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.payment.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.RatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.profile.RatingHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.home.ArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.profile.favorite.FavoriteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.profile.EditProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.SplashScreenActivity"
             android:exported="true">
@@ -47,7 +88,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

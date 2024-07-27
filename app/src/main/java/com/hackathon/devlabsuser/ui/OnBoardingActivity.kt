@@ -3,7 +3,6 @@ package com.hackathon.devlabsuser.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ActivityOnBoardingBinding
 import com.hackathon.devlabsuser.ui.authentication.LoginActivity
 

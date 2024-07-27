@@ -1,23 +1,18 @@
 package com.hackathon.devlabsuser.viewmodel
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hackathon.devlabsuser.api.ApiConfig
 import com.hackathon.devlabsuser.model.AddMessageRequest
 import com.hackathon.devlabsuser.model.AddMessageResponse
 import com.hackathon.devlabsuser.model.GetMessageResponse
-import com.hackathon.devlabsuser.model.LoginRequest
-import com.hackathon.devlabsuser.model.LoginResponse
-import com.hackathon.devlabsuser.model.RegisterRequest
-import com.hackathon.devlabsuser.model.RegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MessageViewModel(application: Application) : AndroidViewModel(application) {
+class MessageViewModel() : ViewModel() {
     private val _addMessage = MutableLiveData<AddMessageResponse>()
     val addMessage : LiveData<AddMessageResponse> = _addMessage
 

@@ -16,7 +16,7 @@
     <string name="empty_password">Kata Sandi Tidak Boleh Kosong!</string>
     <string name="empty_passconf">Kata Sandi Konfirmasi Tidak Boleh Kosong!</string>
     <string name="invalid_email">Format Email Salah!</string>
-    <string name="invalid_password">Password tidak boleh kurang dari 6 karakter!</string>
+    <string name="invalid_password">Password tidak boleh kurang dari 8 karakter!</string>
 
     <string name="home">Home</string>
     <string name="profile">Profile</string>
@@ -36,6 +36,9 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <string name="Permisson_denied">Permission not granted.</string>
+    <string name="choose_a_picture">Choose a Picture</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

@@ -12,15 +12,19 @@ import com.hackathon.devlabsuser.databinding.ActivityLoginBinding
 import com.hackathon.devlabsuser.model.LoginRequest
 import com.hackathon.devlabsuser.ui.main.MainActivity
 import com.hackathon.devlabsuser.viewmodel.AuthenticationViewModel
+import com.hackathon.devlabsuser.viewmodel.ProfileViewModel
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var authenticationViewModel: AuthenticationViewModel
     private lateinit var authenticationManager: AuthenticationManager
+    private lateinit var profileViewModel: ProfileViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
         authenticationManager = AuthenticationManager(this)
         authenticationViewModel = ViewModelProvider(this)[AuthenticationViewModel::class.java]
@@ -49,19 +53,13 @@ class LoginActivity : AppCompatActivity() {
                 )
                 if (email.isNotEmpty() && password.isNotEmpty()) {
                     authenticationViewModel.login(loginRequest)
-                    authenticationViewModel.loginResponse.observe(this@LoginActivity) {
-                        if(it.code == 200) {
-                            authenticationManager.apply {
-                                setSession(AuthenticationManager.SESSION, true)
-                                login(AuthenticationManager.TOKEN, it.data.accessToken)
-                                login(AuthenticationManager.EMAIL, email)
-                            }
-                            Toast.makeText(this@LoginActivity, "Successfully login", Toast.LENGTH_SHORT).show()
-                            navigateToMainActivity()
-                        }
-                    }
-                } else {
+                    login(email, authenticationViewModel)
+                } else if (email.isEmpty() && password.isEmpty()){
                     Toast.makeText(this@LoginActivity, "Email dan Password harus diisi!", Toast.LENGTH_SHORT).show()
+                } else if (email.isEmpty()) {
+                    Toast.makeText(this@LoginActivity, "Email harus diisi!", Toast.LENGTH_SHORT).show()
+                } else if (password.isEmpty()) {
+                    Toast.makeText(this@LoginActivity, "Password harus diisi!", Toast.LENGTH_SHORT).show()
                 }
             }
             btnLoginGoogle.setOnClickListener {
@@ -77,5 +75,37 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoading(state: Boolean) {
         binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun login(email: String, authenticationViewModel: AuthenticationViewModel) {
+        authenticationViewModel.loginResponse.observe(this@LoginActivity) { loginResponse ->
+            if(loginResponse != null) {
+                if(loginResponse.success) {
+                    authenticationManager.apply {
+                        setSession(AuthenticationManager.SESSION, true)
+                        login(AuthenticationManager.TOKEN, loginResponse.data.accessToken)
+                        login(AuthenticationManager.EMAIL, email)
+                        login(AuthenticationManager.ROLE, "client")
+                        val getToken = authenticationManager.getAccess(AuthenticationManager.TOKEN).toString()
+                        val token = "Bearer $getToken"
+                        profileViewModel.getProfile(token)
+                        profileViewModel.getProfileResponse.observe(this@LoginActivity) { getProfileResponse ->
+                            if (getProfileResponse != null) {
+                                Log.e("Get Profile : ", getProfileResponse.toString())
+                                login(AuthenticationManager.NAME, getProfileResponse.profileName ?: "")
+                                login(AuthenticationManager.PHONE_NUMBER, getProfileResponse.phoneNumber ?: "")
+                                login(AuthenticationManager.PROFILE_PICTURE, getProfileResponse.profilePicture ?: "")
+                                login(AuthenticationManager.PROFILE_DESCRIPTION, getProfileResponse.profileDescription ?: "Pengguna baru")
+                            }
+                        }
+                    }
+                    Toast.makeText(this@LoginActivity, "Successfully login", Toast.LENGTH_SHORT).show()
+                    navigateToMainActivity()
+                }
+                else {
+                    Toast.makeText(this@LoginActivity, "Email dan password tidak sesuai!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

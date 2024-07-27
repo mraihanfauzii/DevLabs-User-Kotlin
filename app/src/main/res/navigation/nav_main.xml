@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.hackathon.devlabsuser.ui.main.HomeFragment"
+        android:name="com.hackathon.devlabsuser.ui.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="com.hackathon.devlabsuser.ui.main.DiscoverFragment"
+        android:name="com.hackathon.devlabsuser.ui.main.discover.DiscoverFragment"
         android:label="fragment_discover"
         tools:layout="@layout/fragment_discover" />
     <fragment
         android:id="@+id/constructionFragment"
-        android:name="com.hackathon.devlabsuser.ui.main.ConstructionFragment"
+        android:name="com.hackathon.devlabsuser.ui.main.construction.ConstructionFragment"
         android:label="fragment_construction"
         tools:layout="@layout/fragment_construction" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.hackathon.devlabsuser.ui.main.ProfileFragment"
+        android:name="com.hackathon.devlabsuser.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
