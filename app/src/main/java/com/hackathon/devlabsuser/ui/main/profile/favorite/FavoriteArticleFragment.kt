@@ -8,23 +8,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hackathon.devlabsuser.adapter.favorite.FavoritePortfolioAdapter
-import com.hackathon.devlabsuser.databinding.FragmentFavoritePortfolioBinding
+import com.hackathon.devlabsuser.adapter.favorite.FavoriteArticleAdapter
+import com.hackathon.devlabsuser.databinding.FragmentFavoriteArticleBinding
 import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.ui.main.home.DetailArticleActivity
-import com.hackathon.devlabsuser.utils.ArticleDataDummy
+import com.hackathon.devlabsuser.viewmodel.FavoriteViewModel
 
-class FavoritePortfolioFragment : Fragment() {
-    private var _binding : FragmentFavoritePortfolioBinding? = null
+class FavoriteArticleFragment : Fragment() {
+    private var _binding : FragmentFavoriteArticleBinding? = null
     private val binding get() = _binding!!
-    private lateinit var favoritePortfolioAdapter: FavoritePortfolioAdapter
+    private lateinit var favoriteArticleAdapter: FavoriteArticleAdapter
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private var articleList: List<Article> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFavoritePortfolioBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteArticleBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -32,18 +35,22 @@ class FavoritePortfolioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        favoritePortfolioAdapter = FavoritePortfolioAdapter()
-        favoritePortfolioAdapter.getArticles(ArticleDataDummy.listArticle)
+        favoriteArticleAdapter = FavoriteArticleAdapter()
+        favoriteViewModel.allArticleFavorites.observe(viewLifecycleOwner) { articles ->
+            articleList = articles
+            favoriteArticleAdapter.getArticles(articles)
+        }
         binding.rvArticle.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = favoritePortfolioAdapter
+            adapter = favoriteArticleAdapter
         }
-        favoritePortfolioAdapter.setOnItemClickCallback(object: FavoritePortfolioAdapter.OnItemClickCallback {
+        favoriteArticleAdapter.setOnItemClickCallback(object: FavoriteArticleAdapter.OnItemClickCallback {
             override fun onItemClicked(article: Article) {
                 Intent(context, DetailArticleActivity::class.java).also {
                     it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
                     it.putExtra(DetailArticleActivity.TITLE, article.title)
                     it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
+                    it.putExtra(DetailArticleActivity.ID, article.id.toString())
                     startActivity(it)
                 }
             }
@@ -59,8 +66,8 @@ class FavoritePortfolioFragment : Fragment() {
     }
 
     private fun filter(text: String) {
-        val filteredList = ArticleDataDummy.listArticle.filter { it.title.contains(text, ignoreCase = true) }
-        favoritePortfolioAdapter.getArticles(filteredList)
+        val filteredList = articleList.filter { it.title.contains(text, ignoreCase = true) }
+        favoriteArticleAdapter.getArticles(filteredList)
     }
 
     private fun showLoading(state: Boolean) {

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.home.ArticleActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.main.profile.favorite.FavoriteArticleFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -17,7 +17,7 @@
         android:layout_marginTop="24dp">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_nama_lengkap"
-            android:layout_width="285dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:hint="Cari Judul"
             app:boxCornerRadiusBottomEnd="30dp"
@@ -31,13 +31,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
-        <ImageView
-            android:id="@+id/iv_favorite"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_favorite_before" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -61,5 +54,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

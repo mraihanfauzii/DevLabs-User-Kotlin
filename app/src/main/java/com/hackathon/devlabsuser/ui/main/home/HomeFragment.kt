@@ -53,6 +53,7 @@ class HomeFragment : Fragment() {
                     it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
                     it.putExtra(DetailArticleActivity.TITLE, article.title)
                     it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
+                    it.putExtra(DetailArticleActivity.ID, article.id.toString())
                     startActivity(it)
                 }
             }

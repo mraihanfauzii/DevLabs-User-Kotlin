@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.home.article.AllArticleAdapter
 import com.hackathon.devlabsuser.databinding.ActivityArticleBinding
 import com.hackathon.devlabsuser.model.Article
+import com.hackathon.devlabsuser.ui.main.profile.favorite.FavoriteActivity
 import com.hackathon.devlabsuser.utils.ArticleDataDummy
 
 class ArticleActivity : AppCompatActivity() {
@@ -23,6 +24,12 @@ class ArticleActivity : AppCompatActivity() {
         articleAdapter.getArticles(ArticleDataDummy.listArticle)
         articleRecyclerView()
         onArticleClick()
+
+        binding.ivFavorite.setOnClickListener {
+            val intent = Intent(this, FavoriteActivity::class.java)
+            intent.putExtra("navigate_to", "FavoriteArticleFragment")
+            startActivity(intent)
+        }
 
         binding.searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -52,6 +59,7 @@ class ArticleActivity : AppCompatActivity() {
                     it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
                     it.putExtra(DetailArticleActivity.TITLE, article.title)
                     it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
+                    it.putExtra(DetailArticleActivity.ID, article.id.toString())
                     startActivity(it)
                 }
             }

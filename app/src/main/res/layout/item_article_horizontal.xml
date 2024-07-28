@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:src="@drawable/baseline_favorite" />
+                    android:src="@drawable/ic_favorite_before" />
 
             </LinearLayout>
 
