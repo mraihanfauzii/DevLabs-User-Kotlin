@@ -1,4 +1,4 @@
-package com.hackathon.devlabsuser.adapter
+package com.hackathon.devlabsuser.adapter.home.article
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -29,12 +29,12 @@ class ArticleHomeAdapter: RecyclerView.Adapter<ArticleHomeAdapter.ArticleListVie
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ArticleHomeAdapter.ArticleListViewHolder {
+    ): ArticleListViewHolder {
         val data = ItemArticleCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArticleListViewHolder(data)
     }
 
-    override fun onBindViewHolder(holder: ArticleHomeAdapter.ArticleListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArticleListViewHolder, position: Int) {
         holder.getArticle(article[position])
     }
 

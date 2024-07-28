@@ -3,34 +3,30 @@ package com.hackathon.devlabsuser.ui.main.profile
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ActivityEditProfileBinding
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
-import com.hackathon.devlabsuser.ui.authentication.LoginActivity
+import com.hackathon.devlabsuser.ui.main.MainActivity
 import com.hackathon.devlabsuser.utils.reduceFileImage
 import com.hackathon.devlabsuser.utils.rotateFile
 import com.hackathon.devlabsuser.utils.uriToFile
 import com.hackathon.devlabsuser.viewmodel.ProfileViewModel
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileInputStream
-import java.nio.MappedByteBuffer
-import java.nio.channels.FileChannel
 
 class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
     private lateinit var binding: ActivityEditProfileBinding
@@ -45,6 +41,9 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
 
         authenticationManager = AuthenticationManager(this)
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
+        profileViewModel.isLoading.observe(this) { loading ->
+            showLoading(loading)
+        }
 
         val namaLengkap = intent.getStringExtra("nama_lengkap")
         val nomorTelepon = intent.getStringExtra("nomor_telepon")
@@ -58,6 +57,13 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
             edtTelepon.setText(nomorTelepon)
             edtDescription.setText(bio)
             binding.profileContainer.setOnClickListener {
+                if (!allPermissionsGranted()) {
+                    ActivityCompat.requestPermissions(
+                        this@EditProfileActivity,
+                        REQUIRED_PERMISSIONS,
+                        REQUEST_CODE_PERMISSIONS
+                    )
+                }
                 dialogProfPictFragment.show(supportFragmentManager, ModelDialogProfPictFragment::class.java.simpleName)
             }
             btnBatalkan.setOnClickListener {
@@ -78,19 +84,26 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
                 val profilePicturePart = MultipartBody.Part.createFormData("profile_picture", reducedFile.name, requestFile)
 
                 profileViewModel.putProfile(token, profileNameRequestBody, phoneNumberRequestBody, bioRequestBody, profilePicturePart)
-                profileViewModel.putProfileResponse.observe(this@EditProfileActivity) { getProfile ->
-                    if (getProfile != null) {
+                profileViewModel.putProfileResponse.observe(this@EditProfileActivity) { putProfile ->
+                    if (putProfile != null) {
                         authenticationManager.apply {
-                            Log.e("Get Profile : ", getProfile.toString())
+                            Log.e("Get Profile : ", putProfile.toString())
                             login(AuthenticationManager.NAME, inputNamaLengkap)
                             login(AuthenticationManager.PHONE_NUMBER, inputNomorTelepon)
                             login(AuthenticationManager.PROFILE_PICTURE, "")
                             login(AuthenticationManager.PROFILE_DESCRIPTION, inputBio)
                         }
+                        val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
+                        intent.putExtra("navigate_to", "ProfileFragment")
+                        startActivity(intent)
                     }
                 }
             }
         }
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     override fun onOptionSelected(option: String) {

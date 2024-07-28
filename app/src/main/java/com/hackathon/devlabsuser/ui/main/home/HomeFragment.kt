@@ -10,9 +10,10 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hackathon.devlabsuser.adapter.ArticleHomeAdapter
+import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentHomeBinding
+import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.ui.ChatActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.utils.ArticleDataDummy
@@ -46,6 +47,16 @@ class HomeFragment : Fragment() {
         promoAdapter = PromoAdapter()
         promoAdapter.notifyDataSetChanged()
         articleAdapter.getArticles(ArticleDataDummy.listArticle)
+        articleAdapter.setOnItemClickCallback(object: ArticleHomeAdapter.OnItemClickCallback {
+            override fun onItemClicked(article: Article) {
+                Intent(context, DetailArticleActivity::class.java).also {
+                    it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
+                    it.putExtra(DetailArticleActivity.TITLE, article.title)
+                    it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
+                    startActivity(it)
+                }
+            }
+        })
 
         homeViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[HomeViewModel::class.java]
         homeViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
@@ -62,6 +73,11 @@ class HomeFragment : Fragment() {
             if (it != null) {
                 promoAdapter.getPromos(it)
             }
+        }
+
+        binding.tvArtikel.setOnClickListener {
+            val intent = Intent(context, ArticleActivity::class.java)
+            startActivity(intent)
         }
 
         binding.btnChat.setOnClickListener {

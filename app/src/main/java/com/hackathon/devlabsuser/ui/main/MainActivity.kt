@@ -18,5 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.activityMainNavHostFragment)
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        // Check if there's an intent to navigate to a specific fragment
+        val navigateTo = intent.getStringExtra("navigate_to")
+        if (navigateTo == "ProfileFragment") {
+            navController.navigate(R.id.profileFragment)
+        }
     }
 }
