@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.FragmentProfileBinding
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.ui.authentication.LoginActivity
@@ -56,7 +58,7 @@ class ProfileFragment : Fragment() {
         val name = authenticationManager.getAccess(AuthenticationManager.NAME).toString()
         val phoneNumber = authenticationManager.getAccess(AuthenticationManager.PHONE_NUMBER).toString()
         val profileDescription = authenticationManager.getAccess(AuthenticationManager.PROFILE_DESCRIPTION).toString()
-        val profilePicture = authenticationManager.getAccess(AuthenticationManager.PROFILE_PICTURE).toString()
+        val profilePicture = "https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz"+authenticationManager.getAccess(AuthenticationManager.PROFILE_PICTURE).toString()
 
         binding.apply {
             tvEmail.text = email
@@ -67,11 +69,18 @@ class ProfileFragment : Fragment() {
                 val intent = Intent(context, FavoriteActivity::class.java)
                 startActivity(intent)
             }
+            if (profilePicture != null) {
+                Glide.with(this@ProfileFragment)
+                    .load(profilePicture)
+                    .placeholder(R.drawable.baseline_account_circle_24)
+                    .into(ivProfileImage) // sesuaikan dengan ID ImageView Anda
+            }
             btnEditProfil.setOnClickListener {
                 val editProfil = Intent(requireContext(), EditProfileActivity::class.java)
                 editProfil.putExtra("nama_lengkap", name)
                 editProfil.putExtra("nomor_telepon", phoneNumber)
                 editProfil.putExtra("bio", profileDescription)
+                editProfil.putExtra("profile", profilePicture)
                 startActivity(editProfil)
             }
             btnLogout.setOnClickListener {

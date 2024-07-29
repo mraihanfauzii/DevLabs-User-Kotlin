@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.hackathon.devlabsuser.model.ArchitectFavorite
 import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.model.PortfolioFavorite
+import com.hackathon.devlabsuser.model.UserData
 
 @Database(
-    entities = [Article::class, ArchitectFavorite::class, PortfolioFavorite::class],
+    entities = [Article::class, UserData::class, PortfolioFavorite::class],
     version = 1
 )
 abstract class FavoriteDatabase : RoomDatabase() {

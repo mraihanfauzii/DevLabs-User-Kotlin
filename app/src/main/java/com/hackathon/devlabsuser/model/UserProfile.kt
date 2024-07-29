@@ -1,19 +1,15 @@
 package com.hackathon.devlabsuser.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class GetProfileResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: UserData
-) : Parcelable
-
+@Entity(tableName = "architect_favorite")
 @Parcelize
 data class UserData(
+    @PrimaryKey
     val id: String,
     val email: String,
     @field:SerializedName("phonenumber")
@@ -28,13 +24,6 @@ data class UserData(
     @field:SerializedName("created_at")
     val createdAt: String
 ) : Parcelable
-
-data class UpdateProfileResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: UpdateProfileData
-)
 
 data class UpdateProfileData(
     val id: String

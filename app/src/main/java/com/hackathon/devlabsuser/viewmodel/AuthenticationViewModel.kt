@@ -5,21 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackathon.devlabsuser.api.ApiConfig
+import com.hackathon.devlabsuser.model.ApiResponse
 import com.hackathon.devlabsuser.model.DeleteResponse
+import com.hackathon.devlabsuser.model.LoginData
 import com.hackathon.devlabsuser.model.LoginRequest
-import com.hackathon.devlabsuser.model.LoginResponse
+import com.hackathon.devlabsuser.model.RegisterData
 import com.hackathon.devlabsuser.model.RegisterRequest
-import com.hackathon.devlabsuser.model.RegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class AuthenticationViewModel() : ViewModel() {
-    private val _registerResponse = MutableLiveData<RegisterResponse>()
-    val registerResponse : LiveData<RegisterResponse> = _registerResponse
+    private val _registerResponse = MutableLiveData<ApiResponse<RegisterData>>()
+    val registerResponse : LiveData<ApiResponse<RegisterData>> = _registerResponse
 
-    private val _loginResponse = MutableLiveData<LoginResponse>()
-    val loginResponse : LiveData<LoginResponse> = _loginResponse
+    private val _loginResponse = MutableLiveData<ApiResponse<LoginData>>()
+    val loginResponse : LiveData<ApiResponse<LoginData>> = _loginResponse
 
     private val _logoutResponse = MutableLiveData<DeleteResponse>()
     val logoutResponse : LiveData<DeleteResponse> = _logoutResponse
@@ -33,10 +34,10 @@ class AuthenticationViewModel() : ViewModel() {
     fun register(registerRequest: RegisterRequest){
         _isLoading.value = true
         ApiConfig.getApiService().register(registerRequest).enqueue(object :
-            Callback<RegisterResponse> {
+            Callback<ApiResponse<RegisterData>> {
             override fun onResponse(
-                call: Call<RegisterResponse>,
-                response: Response<RegisterResponse>
+                call: Call<ApiResponse<RegisterData>>,
+                response: Response<ApiResponse<RegisterData>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -48,7 +49,7 @@ class AuthenticationViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<RegisterData>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("RegisterViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to register"
@@ -58,10 +59,10 @@ class AuthenticationViewModel() : ViewModel() {
 
     fun login(loginRequest: LoginRequest){
         _isLoading.value = true
-        ApiConfig.getApiService().login(loginRequest).enqueue(object : Callback<LoginResponse> {
+        ApiConfig.getApiService().login(loginRequest).enqueue(object : Callback<ApiResponse<LoginData>> {
             override fun onResponse(
-                call: Call<LoginResponse>,
-                response: Response<LoginResponse>
+                call: Call<ApiResponse<LoginData>>,
+                response: Response<ApiResponse<LoginData>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -73,7 +74,7 @@ class AuthenticationViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<LoginData>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("LoginViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to login"

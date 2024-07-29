@@ -81,7 +81,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-common-java8:2.8.4")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.4")
 
-    // save dark and light themes with datastore
+    // Save dark and light themes with datastore
     implementation ("androidx.datastore:datastore-preferences-core:1.1.1")
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
 
@@ -91,4 +91,8 @@ dependencies {
     androidTestImplementation ("androidx.room:room-testing:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
+
+    // Map
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 }

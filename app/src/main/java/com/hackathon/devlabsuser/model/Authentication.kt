@@ -15,13 +15,6 @@ data class RegisterRequest(
     val role: String
 ) : Parcelable
 
-data class RegisterResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: RegisterData
-)
-
 data class RegisterData(
     val id: String
 )
@@ -30,13 +23,6 @@ data class LoginRequest(
     val email: String,
     val password: String,
     val role: String
-)
-
-data class LoginResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: LoginData
 )
 
 data class LoginData(

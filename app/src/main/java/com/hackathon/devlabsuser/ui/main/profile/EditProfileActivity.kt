@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ActivityEditProfileBinding
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
@@ -47,6 +48,7 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
 
         val namaLengkap = intent.getStringExtra("nama_lengkap")
         val nomorTelepon = intent.getStringExtra("nomor_telepon")
+        val profilePicture = intent.getStringExtra("profile")
         val bio = intent.getStringExtra("bio")
 
         val getToken = authenticationManager.getAccess(AuthenticationManager.TOKEN).toString()
@@ -56,6 +58,12 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
             edtNamaLengkap.setText(namaLengkap)
             edtTelepon.setText(nomorTelepon)
             edtDescription.setText(bio)
+            if (profilePicture != null) {
+                Glide.with(this@EditProfileActivity)
+                    .load(profilePicture)
+                    .placeholder(R.drawable.baseline_account_circle_24)
+                    .into(ivProfileImage) // sesuaikan dengan ID ImageView Anda
+            }
             binding.profileContainer.setOnClickListener {
                 if (!allPermissionsGranted()) {
                     ActivityCompat.requestPermissions(

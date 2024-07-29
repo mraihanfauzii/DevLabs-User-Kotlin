@@ -5,10 +5,13 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Promo(
+data class Theme(
     val id: String,
     val name: String,
-    val img: String,
+    @field:SerializedName("theme_image")
+    val themeImage: String,
     @field:SerializedName("created_at")
-    val createdAt: String
+    val createdAt: String,
+    @field:SerializedName("click_count")
+    val clickCount: Int
 ) : Parcelable

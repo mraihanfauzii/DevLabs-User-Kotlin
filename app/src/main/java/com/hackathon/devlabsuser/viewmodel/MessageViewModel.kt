@@ -5,19 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackathon.devlabsuser.api.ApiConfig
+import com.hackathon.devlabsuser.model.AddMessageData
 import com.hackathon.devlabsuser.model.AddMessageRequest
-import com.hackathon.devlabsuser.model.AddMessageResponse
-import com.hackathon.devlabsuser.model.GetMessageResponse
+import com.hackathon.devlabsuser.model.ApiResponse
+import com.hackathon.devlabsuser.model.Message
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MessageViewModel() : ViewModel() {
-    private val _addMessage = MutableLiveData<AddMessageResponse>()
-    val addMessage : LiveData<AddMessageResponse> = _addMessage
+    private val _addMessage = MutableLiveData<ApiResponse<AddMessageData>>()
+    val addMessage : LiveData<ApiResponse<AddMessageData>> = _addMessage
 
-    private val _getMessage = MutableLiveData<GetMessageResponse>()
-    val getMessage : LiveData<GetMessageResponse> = _getMessage
+    private val _getMessage = MutableLiveData<ApiResponse<List<Message>>>()
+    val getMessage : LiveData<ApiResponse<List<Message>>> = _getMessage
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -28,10 +29,10 @@ class MessageViewModel() : ViewModel() {
     fun addMessage(token: String, addMessageRequest: AddMessageRequest){
         _isLoading.value = true
         ApiConfig.getApiService().addMessage(token, addMessageRequest).enqueue(object :
-            Callback<AddMessageResponse> {
+            Callback<ApiResponse<AddMessageData>> {
             override fun onResponse(
-                call: Call<AddMessageResponse>,
-                response: Response<AddMessageResponse>
+                call: Call<ApiResponse<AddMessageData>>,
+                response: Response<ApiResponse<AddMessageData>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -41,7 +42,7 @@ class MessageViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<AddMessageResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<AddMessageData>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("RegisterViewModel", "onFailure: ${t.message.toString()}")
             }
@@ -50,10 +51,10 @@ class MessageViewModel() : ViewModel() {
 
     fun getMessage(token: String, firstUserId: String, secondUserId: String){
         _isLoading.value = true
-        ApiConfig.getApiService().getMessage(token, firstUserId, secondUserId).enqueue(object : Callback<GetMessageResponse> {
+        ApiConfig.getApiService().getMessage(token, firstUserId, secondUserId).enqueue(object : Callback<ApiResponse<List<Message>>> {
             override fun onResponse(
-                call: Call<GetMessageResponse>,
-                response: Response<GetMessageResponse>
+                call: Call<ApiResponse<List<Message>>>,
+                response: Response<ApiResponse<List<Message>>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -64,7 +65,7 @@ class MessageViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<GetMessageResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<List<Message>>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("LoginViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Error, Failed to load Product"

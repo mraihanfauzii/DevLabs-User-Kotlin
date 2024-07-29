@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackathon.devlabsuser.api.ApiConfig
-import com.hackathon.devlabsuser.model.GetProfileResponse
-import com.hackathon.devlabsuser.model.UpdateProfileResponse
+import com.hackathon.devlabsuser.model.ApiResponse
+import com.hackathon.devlabsuser.model.UpdateProfileData
 import com.hackathon.devlabsuser.model.UserData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,8 +17,8 @@ import retrofit2.Response
 class ProfileViewModel() : ViewModel() {
     private val _getProfileResponse = MutableLiveData<UserData>()
     val getProfileResponse : LiveData<UserData> = _getProfileResponse
-    private val _putProfileResponse = MutableLiveData<UpdateProfileResponse>()
-    val putProfileResponse : LiveData<UpdateProfileResponse> = _putProfileResponse
+    private val _putProfileResponse = MutableLiveData<ApiResponse<UpdateProfileData>>()
+    val putProfileResponse : LiveData<ApiResponse<UpdateProfileData>> = _putProfileResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -29,10 +29,10 @@ class ProfileViewModel() : ViewModel() {
     fun getProfile(token: String){
         _isLoading.value = true
         ApiConfig.getApiService().getProfile(token).enqueue(object :
-            Callback<GetProfileResponse> {
+            Callback<ApiResponse<UserData>> {
             override fun onResponse(
-                call: Call<GetProfileResponse>,
-                response: Response<GetProfileResponse>
+                call: Call<ApiResponse<UserData>>,
+                response: Response<ApiResponse<UserData>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -44,7 +44,7 @@ class ProfileViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<GetProfileResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<UserData>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("ProfileViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to get profile"
@@ -55,10 +55,10 @@ class ProfileViewModel() : ViewModel() {
     fun putProfile(token: String, profileName: RequestBody, profileDescription: RequestBody, phoneNumber: RequestBody, profile_picture: MultipartBody.Part){
         _isLoading.value = true
         ApiConfig.getApiService().putProfile(token, profileName, profileDescription, phoneNumber, profile_picture).enqueue(object :
-            Callback<UpdateProfileResponse> {
+            Callback<ApiResponse<UpdateProfileData>> {
             override fun onResponse(
-                call: Call<UpdateProfileResponse>,
-                response: Response<UpdateProfileResponse>
+                call: Call<ApiResponse<UpdateProfileData>>,
+                response: Response<ApiResponse<UpdateProfileData>>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -70,7 +70,7 @@ class ProfileViewModel() : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiResponse<UpdateProfileData>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("ProfileViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to get profile"

@@ -12,31 +12,35 @@ data class AddPortfolioRequest(
     val attachmentFiles: List<String>
 ) : Parcelable
 
-data class AddPortfolioResponse(
-    val message: String,
-    val code: Int,
-    val data: AddPortfolioData
-)
-
 data class AddPortfolioData(
     val id: String
-)
-
-data class GetPortfolioResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: List<Portfolio>
 )
 
 @Parcelize
 data class Portfolio(
     val id: String,
-    @field:SerializedName("architect_id")
-    val architectId: String,
+    val architect: Architect,
+    val theme: PortfolioTheme?,
     val name: String,
     val description: String,
+    @field:SerializedName("estimated_budget")
+    val estimatedBudget: Int?,
     @field:SerializedName("created_at")
     val createdAt: String,
-//    val attachments: Any?
+    @field:SerializedName("click_count")
+    val clickCount: String
+) : Parcelable
+
+@Parcelize
+data class PortfolioTheme(
+    val id: String,
+    val name: String,
+    val image: String
+) : Parcelable
+
+@Parcelize
+data class Architect(
+    val id: String,
+    val name: String,
+    val picture: String
 ) : Parcelable

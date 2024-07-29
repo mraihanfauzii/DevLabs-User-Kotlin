@@ -11,24 +11,9 @@ data class AddMessageRequest(
     val message: String,
 ) : Parcelable
 
-data class AddMessageResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: AddMessageData
-)
-
 data class AddMessageData(
     val id: String
 )
-
-@Parcelize
-data class GetMessageResponse(
-    val success: Boolean,
-    val message: String,
-    val code: Int,
-    val data: List<Message>
-) : Parcelable
 
 @Parcelize
 data class Message(
@@ -45,6 +30,6 @@ data class User(
     val id: String,
     @field:SerializedName("profile_name")
     val profileName: String,
-//    @field:SerializedName("profile_picture")
-//    val profilePicture: Any?
+    @field:SerializedName("profile_picture")
+    val profilePicture: String?
 ) : Parcelable

@@ -4,17 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.hackathon.devlabsuser.model.ArchitectFavorite
 import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.room.FavoriteDatabase
 import com.hackathon.devlabsuser.room.FavoriteRepository
 import com.hackathon.devlabsuser.model.PortfolioFavorite
+import com.hackathon.devlabsuser.model.UserData
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: FavoriteRepository
     val allArticleFavorites: LiveData<List<Article>>
-    val allArchitectFavorites: LiveData<List<ArchitectFavorite>>
+    val allArchitectFavorites: LiveData<List<UserData>>
     val allPortfolioFavorites: LiveData<List<PortfolioFavorite>>
 
     init {
