@@ -42,7 +42,9 @@ class DiscoverViewModel() : ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    _getAllArchitect.value = response.body()?.data
+                    val allUsers = response.body()?.data ?: emptyList()
+                    val architects = allUsers.filter { it.role == "architect" }
+                    _getAllArchitect.value = response.body()?.data?.filter { it.role == "architect" }
                 } else {
                     Log.e("PromoViewModel", "onFailure: ${response.message()}")
                     _getAllArchitect.value = response.body()?.data

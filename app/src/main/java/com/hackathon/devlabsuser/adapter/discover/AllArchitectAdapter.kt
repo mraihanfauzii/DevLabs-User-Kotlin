@@ -8,8 +8,7 @@ import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ItemPromoCardBinding
 import com.hackathon.devlabsuser.model.UserData
 
-class AllArchitectAdapter: RecyclerView.Adapter<AllArchitectAdapter.ArchitectListViewHolder>() {
-    private lateinit var onItemClickCallback: OnItemClickCallback
+class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback): RecyclerView.Adapter<AllArchitectAdapter.ArchitectListViewHolder>() {
     private var architectList = emptyList<UserData>()
 
     inner class ArchitectListViewHolder(private val binding: ItemPromoCardBinding) :

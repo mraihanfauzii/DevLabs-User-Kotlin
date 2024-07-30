@@ -1,5 +1,6 @@
 package com.hackathon.devlabsuser.ui.main.discover
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.AllArchitectAdapter
 import com.hackathon.devlabsuser.adapter.discover.ThemesAdapter
 import com.hackathon.devlabsuser.adapter.discover.TrendingPortfoliosAdapter
-import com.hackathon.devlabsuser.adapter.home.PortfolioRecommendationAdapter
-import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentRecommendationBinding
+import com.hackathon.devlabsuser.model.UserData
+import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
 
@@ -42,8 +43,19 @@ class RecommendationFragment : Fragment() {
         themeAdapter = ThemesAdapter()
         themeAdapter.notifyDataSetChanged()
 
-        architectAdapter = AllArchitectAdapter()
-        architectAdapter.notifyDataSetChanged()
+        architectAdapter = AllArchitectAdapter(object: AllArchitectAdapter.OnItemClickCallback {
+            override fun onItemClicked(architect: UserData) {
+                val intent = Intent(context, ArchitectActivity::class.java)
+                intent.putExtra("id", architect.id)
+                intent.putExtra("profile_picture", architect.profilePicture)
+                intent.putExtra("profile_name", architect.profileName)
+                intent.putExtra("email", architect.email)
+                intent.putExtra("phone_number", architect.phoneNumber)
+                intent.putExtra("profile_description", architect.profileDescription)
+                intent.putExtra("role", architect.role)
+                startActivity(intent)
+            }
+        })
 
         trendingPortfoliosAdapter = TrendingPortfoliosAdapter()
         trendingPortfoliosAdapter.notifyDataSetChanged()

@@ -3,8 +3,11 @@ package com.hackathon.devlabsuser.ui.main.discover
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hackathon.devlabsuser.adapter.discover.DiscoverFragmentAdapter
 import com.hackathon.devlabsuser.databinding.FragmentDiscoverBinding
@@ -37,5 +40,9 @@ class DiscoverFragment : Fragment() {
                 }
             }.attach()
         }
+        disableSwipeInViewPager(binding.ViewPager)
+    }
+    private fun disableSwipeInViewPager(viewPager: ViewPager2) {
+        viewPager.isUserInputEnabled = false // Disable swipe for ViewPager2
     }
 }

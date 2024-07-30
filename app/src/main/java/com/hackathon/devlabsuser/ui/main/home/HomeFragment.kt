@@ -99,6 +99,12 @@ class HomeFragment : Fragment() {
             val intent = Intent(context, ChatActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnDesainBangun.setOnClickListener {
+            val dialog = QuestionnaireDialogFragment()
+            dialog.show(childFragmentManager, "QuestionnaireDialogFragment")
+        }
+
         binding.rvArtikel.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
             adapter = articleAdapter

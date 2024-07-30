@@ -98,30 +98,30 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<ApiResponse<List<Portfolio>>>
 
-//    @POST("portofolios")
-//    fun addPortfolio (
-//        @Header("Authorization") token: String,
-//        @Body addPortfolioRequest: AddPortfolioRequest
-//    ): Call<ApiResponse<AddPortfolioData>>
-//
-//    @GET("portofolios")
-//    fun getPortfolio (
-//        @Header("Authorization") token: String,
-//        @Query("architect_id") architectId: String,
-//    ): Call<ApiResponse<List<Portfolio>>>
-//
-//    @Multipart
-//    @PUT("portofolios")
-//    fun putPortfolio (
-//        @Header("Authorization") token: String,
-//        @Part("name") profileDescription: RequestBody,
-//        @Part("description") phoneNumber: RequestBody,
-//        @Part attachment_files: MultipartBody.Part
-//    )
-//
-//    @DELETE("portofolios")
-//    fun deletePortfolio (
-//        @Header("Authorization") token: String,
-//        @Query("architect_id") architectId: String,
-//    ): Call<DeleteResponse>
+    @POST("portofolios")
+    fun addPortfolio (
+        @Header("Authorization") token: String,
+        @Body addPortfolioRequest: AddPortfolioRequest
+    ): Call<ApiResponse<AddPortfolioData>>
+
+    @GET("portofolios")
+    fun getPortfolio (
+        @Header("Authorization") token: String,
+        @Query("architect_id") architectId: String,
+    ): Call<ApiResponse<List<Portfolio>>>
+
+    @Multipart
+    @PUT("portofolios")
+    fun putPortfolio (
+        @Header("Authorization") token: String,
+        @Part("name") profileDescription: RequestBody,
+        @Part("description") phoneNumber: RequestBody,
+        @Part attachment_files: MultipartBody.Part
+    )
+
+    @DELETE("portofolios")
+    fun deletePortfolio (
+        @Header("Authorization") token: String,
+        @Query("architect_id") architectId: String,
+    ): Call<DeleteResponse>
 }

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
-import com.hackathon.devlabsuser.databinding.ItemPromoCardBinding
 import com.hackathon.devlabsuser.model.Portfolio
 
 class LatestPortfoliosAdapter: RecyclerView.Adapter<LatestPortfoliosAdapter.LatestPortfoliosViewHolder>() {
