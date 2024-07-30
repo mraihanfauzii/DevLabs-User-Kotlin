@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Izin Menggunakan Internet -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Izin Akses Kamera -->
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- Izin Untuk Mengakses Penyimpanan, pada aplikasi ini untuk mengakses Galeri -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" /> <!-- Izin Akses Kamera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Izin Untuk Mengakses Penyimpanan, pada aplikasi ini untuk mengakses Galeri -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DevlabsUser"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.main.home.FullScreenYoutubeViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA82FIXRqsMilx4QkwhAOyobGC5H8TtjeA" />
+
         <activity
             android:name=".ui.main.home.map.MapsActivity"
             android:exported="false" />

@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hackathon.devlabsuser.adapter.discover.ThemesAdapter
+import com.hackathon.devlabsuser.adapter.home.VideoAdapter
 import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentHomeBinding
@@ -18,7 +18,6 @@ import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.ui.ChatActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.utils.ArticleDataDummy
-import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
 import com.hackathon.devlabsuser.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -28,8 +27,13 @@ class HomeFragment : Fragment() {
     private lateinit var articleAdapter: ArticleHomeAdapter
     private lateinit var promoAdapter: PromoAdapter
     private lateinit var homeViewModel: HomeViewModel
-    private lateinit var themeAdapter: ThemesAdapter
-    private lateinit var discoverViewModel: DiscoverViewModel
+    private val videoIds = listOf(
+        "CNPm1fkqIjc",
+        "n_fKsJhYCeE",
+        "fxCyKIM5jKY",
+        "9TogelBk8KE",
+        "AiUEElYSAok"
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +52,6 @@ class HomeFragment : Fragment() {
         val token = "Bearer $getToken"
 
         articleAdapter = ArticleHomeAdapter()
-        themeAdapter = ThemesAdapter()
-        themeAdapter.notifyDataSetChanged()
         promoAdapter = PromoAdapter()
         promoAdapter.notifyDataSetChanged()
         articleAdapter.getArticles(ArticleDataDummy.listArticle)
@@ -82,14 +84,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        discoverViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[DiscoverViewModel::class.java]
-        discoverViewModel.getAllThemes(token)
-        discoverViewModel.getAllThemes.observe(viewLifecycleOwner) {
-            if (it != null) {
-                themeAdapter.getThemes(it)
-            }
-        }
-
         binding.tvArtikel.setOnClickListener {
             val intent = Intent(context, ArticleActivity::class.java)
             startActivity(intent)
@@ -116,7 +110,7 @@ class HomeFragment : Fragment() {
 
         binding.rvTema.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = themeAdapter
+            adapter = VideoAdapter(videoIds, viewLifecycleOwner.lifecycle)
         }
     }
 

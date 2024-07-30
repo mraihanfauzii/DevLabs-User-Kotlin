@@ -1,29 +1,45 @@
 package com.hackathon.devlabsuser.ui.main.home
 
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.*
 import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
 import kotlinx.coroutines.launch
+import com.hackathon.devlabsuser.BR
+import java.util.*
 
-class QuestionnaireDialogFragment : DialogFragment() {
+class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
     private val viewModel: QuestionnaireViewModel by viewModels()
     private lateinit var binding: ViewDataBinding
+    private lateinit var map: GoogleMap
+    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
+        binding.lifecycleOwner = this // Tambahkan ini untuk menghubungkan ViewModel dengan Binding
+        binding.setVariable(BR.viewModel, viewModel) // Hubungkan ViewModel dengan Binding
         return binding.root
     }
 
@@ -45,7 +61,41 @@ class QuestionnaireDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+        if (viewModel.currentQuestion == 1) {
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+
+            val searchView = view.findViewById<SearchView>(R.id.search_view)
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        searchLocation(it)
+                    }
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+        }
         bindViews()
+    }
+
+    private fun searchLocation(query: String) {
+        val addressList = geocoder.getFromLocationName(query, 1)
+        if (addressList != null && addressList.isNotEmpty()) {
+            val address = addressList[0]
+            val latLng = LatLng(address.latitude, address.longitude)
+            map.clear()
+            map.addMarker(MarkerOptions().position(latLng).title(query))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            viewModel.selectedLocation = latLng
+        } else {
+            Toast.makeText(requireContext(), "Lokasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun bindViews() {
@@ -80,8 +130,7 @@ class QuestionnaireDialogFragment : DialogFragment() {
     private fun setupQuestion2() {
         val questionBinding = binding as QuestionProjectLocationBinding
         questionBinding.buttonNext.setOnClickListener {
-            // Assume we get the location from some map widget
-            val location = "Sample Location"
+            val location = viewModel.selectedLocation?.let { "${it.latitude},${it.longitude}" } ?: "No Location Selected"
             saveAnswerAndMoveToNext(location)
         }
     }
@@ -189,5 +238,18 @@ class QuestionnaireDialogFragment : DialogFragment() {
             // Implement the API call here
         }
         dismiss()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        Log.d("QuestionnaireDialogFragment", "Map is ready") // Tambahkan log ini
+        map.setOnMapClickListener { latLng ->
+            Log.d("QuestionnaireDialogFragment", "Map clicked at: ${latLng.latitude}, ${latLng.longitude}") // Tambahkan log ini
+            map.clear()
+            map.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
+            viewModel.selectedLocation = latLng // Simpan lokasi yang dipilih ke ViewModel
+        }
+        val defaultLocation = LatLng(-34.0, 151.0)
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10f))
     }
 }
