@@ -1,13 +1,12 @@
 package com.hackathon.devlabsuser.ui.main.home
 
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
+import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
@@ -19,27 +18,29 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.*
 import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
 import kotlinx.coroutines.launch
 import com.hackathon.devlabsuser.BR
-import java.util.*
 
 class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
-    private val viewModel: QuestionnaireViewModel by viewModels()
+    private val viewModel: QuestionnaireViewModel by viewModels({ requireParentFragment() })
     private lateinit var binding: ViewDataBinding
     private lateinit var map: GoogleMap
-    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
-        binding.lifecycleOwner = this // Tambahkan ini untuk menghubungkan ViewModel dengan Binding
-        binding.setVariable(BR.viewModel, viewModel) // Hubungkan ViewModel dengan Binding
+        binding.lifecycleOwner = this
+        binding.setVariable(BR.viewModel, viewModel)
         return binding.root
     }
 
@@ -49,67 +50,36 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
             1 -> R.layout.question_project_location
             2 -> R.layout.question_project_need_type
             3 -> R.layout.question_building_type
-            4 -> R.layout.question_building_area
-            5 -> R.layout.question_num_occupants
-            6 -> R.layout.question_num_rooms
-            7 -> R.layout.question_num_bathrooms
-            8 -> R.layout.question_num_floors
-            9 -> R.layout.question_theme
+            4 -> R.layout.question_building_area_and_num_floors
+            5 -> R.layout.question_combined
+            6 -> R.layout.question_theme
+            7 -> R.layout.question_summary
             else -> throw IllegalArgumentException("Invalid question index")
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        geocoder = Geocoder(requireContext(), Locale.getDefault())
 
-        if (viewModel.currentQuestion == 1) {
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
-            val searchView = view.findViewById<SearchView>(R.id.search_view)
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        searchLocation(it)
-                    }
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
+        // Initialize Places.
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), "AIzaSyA82FIXRqsMilx4QkwhAOyobGC5H8TtjeA")
         }
+
         bindViews()
     }
 
-    private fun searchLocation(query: String) {
-        val addressList = geocoder.getFromLocationName(query, 1)
-        if (addressList != null && addressList.isNotEmpty()) {
-            val address = addressList[0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            map.clear()
-            map.addMarker(MarkerOptions().position(latLng).title(query))
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            viewModel.selectedLocation = latLng
-        } else {
-            Toast.makeText(requireContext(), "Lokasi tidak ditemukan", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun bindViews() {
+        Log.d("Questionnaire", "bindViews called for question ${viewModel.currentQuestion}")
         when (viewModel.currentQuestion) {
             0 -> setupQuestion1()
             1 -> setupQuestion2()
             2 -> setupQuestion3()
             3 -> setupQuestion4()
-            4 -> setupQuestion5()
-            5 -> setupQuestion6()
-            6 -> setupQuestion7()
-            7 -> setupQuestion8()
-            8 -> setupQuestion9()
-            9 -> setupQuestion10()
+            4 -> setupQuestion5and6()
+            5 -> setupQuestion7to9()
+            6 -> setupQuestion10()
+            7 -> setupSummary()
         }
     }
 
@@ -123,15 +93,43 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
                 R.id.radio_design_and_build -> "Desain dan Bangun"
                 else -> ""
             }
-            saveAnswerAndMoveToNext(answer)
+            if (answer.isEmpty()) {
+                Toast.makeText(requireContext(), "Pilih salah satu layanan", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext(answer)
+            }
         }
     }
 
     private fun setupQuestion2() {
         val questionBinding = binding as QuestionProjectLocationBinding
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(this)
+
+        // Setup Place Autocomplete
+        val autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
+        autocompleteFragment?.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
+        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                place.latLng?.let {
+                    updateMapLocation(it, place.name ?: "Selected Location")
+                }
+            }
+
+            override fun onError(status: com.google.android.gms.common.api.Status) {
+                Toast.makeText(requireContext(), "An error occurred: ${status.statusMessage}", Toast.LENGTH_LONG).show()
+            }
+        })
+
         questionBinding.buttonNext.setOnClickListener {
-            val location = viewModel.selectedLocation?.let { "${it.latitude},${it.longitude}" } ?: "No Location Selected"
-            saveAnswerAndMoveToNext(location)
+            val location = viewModel.selectedLocation
+            val placeName = viewModel.selectedLocationName ?: "No Location Selected"
+            if (location == null) {
+                Toast.makeText(requireContext(), "Pilih lokasi proyek", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext("$placeName (Lat: ${location.latitude}, Long: ${location.longitude})", reopen = true)
+            }
         }
     }
 
@@ -144,7 +142,11 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
                 R.id.radio_renovation -> "Renovasi"
                 else -> ""
             }
-            saveAnswerAndMoveToNext(answer)
+            if (answer.isEmpty()) {
+                Toast.makeText(requireContext(), "Pilih salah satu jenis proyek", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext(answer)
+            }
         }
     }
 
@@ -161,75 +163,138 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
                 R.id.radio_other -> "Tulis sendiri"
                 else -> ""
             }
-            saveAnswerAndMoveToNext(answer)
+            if (answer.isEmpty()) {
+                Toast.makeText(requireContext(), "Pilih salah satu tipe bangunan", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext(answer)
+            }
         }
     }
 
-    private fun setupQuestion5() {
-        val questionBinding = binding as QuestionBuildingAreaBinding
+    private fun setupQuestion5and6() {
+        val questionBinding = binding as QuestionBuildingAreaAndNumFloorsBinding
         questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputBuildingArea.text.toString()
-            saveAnswerAndMoveToNext(answer)
+            val buildingArea = questionBinding.inputBuildingArea.text.toString()
+            val numFloors = questionBinding.inputNumFloors.text.toString()
+
+            if (buildingArea.isEmpty() || numFloors.isEmpty()) {
+                Toast.makeText(requireContext(), "Isi luas bangunan dan jumlah lantai", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext("$buildingArea, Jumlah Lantai: $numFloors")
+            }
         }
     }
 
-    private fun setupQuestion6() {
-        val questionBinding = binding as QuestionNumOccupantsBinding
+    private fun setupQuestion7to9() {
+        val questionBinding = binding as QuestionCombinedBinding
         questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputNumOccupants.text.toString()
-            saveAnswerAndMoveToNext(answer)
-        }
-    }
+            val numOccupants = questionBinding.inputNumOccupants.text.toString()
+            val numRooms = questionBinding.inputNumRooms.text.toString()
+            val numBathrooms = questionBinding.inputNumBathrooms.text.toString()
 
-    private fun setupQuestion7() {
-        val questionBinding = binding as QuestionNumRoomsBinding
-        questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputNumRooms.text.toString()
-            saveAnswerAndMoveToNext(answer)
-        }
-    }
-
-    private fun setupQuestion8() {
-        val questionBinding = binding as QuestionNumBathroomsBinding
-        questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputNumBathrooms.text.toString()
-            saveAnswerAndMoveToNext(answer)
-        }
-    }
-
-    private fun setupQuestion9() {
-        val questionBinding = binding as QuestionNumFloorsBinding
-        questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputNumFloors.text.toString()
-            saveAnswerAndMoveToNext(answer)
+            if (numOccupants.isEmpty() || numRooms.isEmpty() || numBathrooms.isEmpty()) {
+                Toast.makeText(requireContext(), "Isi semua pertanyaan", Toast.LENGTH_SHORT).show()
+            } else {
+                saveAnswerAndMoveToNext("$numOccupants, Jumlah Kamar: $numRooms, Jumlah Kamar Mandi: $numBathrooms")
+            }
         }
     }
 
     private fun setupQuestion10() {
         val questionBinding = binding as QuestionThemeBinding
+        val themeSpinner = questionBinding.themeSpinner
+
         questionBinding.buttonNext.setOnClickListener {
-            val answer = questionBinding.inputTheme.text.toString()
-            saveAnswerAndMoveToNext(answer)
+            val selectedTheme = themeSpinner.selectedItem.toString()
+            if (selectedTheme.isEmpty()) {
+                Toast.makeText(requireContext(), "Pilih salah satu tema", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.selectedTheme = selectedTheme
+                saveAnswerAndMoveToNext("Tema: $selectedTheme")
+            }
         }
     }
 
-    private fun saveAnswerAndMoveToNext(answer: String) {
+    private fun setupSummary() {
+        val questionBinding = binding as QuestionSummaryBinding
+        val summaryText = questionBinding.summaryText
+        val buttonReset = questionBinding.buttonReset
+        val buttonSubmit = questionBinding.buttonSubmit
+
+        // Display the summary of answers with questions
+        val summaryBuilder = StringBuilder()
+        val questions = listOf(
+            "1. Jenis Layanan",
+            "2. Lokasi Proyek",
+            "3. Jenis Proyek",
+            "4. Tipe Bangunan",
+            "5. Luas Bangunan",
+            "6. Jumlah Penghuni",
+            "7. Tema",
+            "8. Jumlah Kamar",
+            "9. Jumlah Kamar Mandi",
+            "10. Tema"
+        )
+
+        viewModel.answers.forEachIndexed { index, answer ->
+            val question = if (index < questions.size) questions[index] else "Pertanyaan Tidak Diketahui"
+            summaryBuilder.append("<b>$question:</b> $answer<br><br>")
+        }
+
+        summaryText.text = HtmlCompat.fromHtml(summaryBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        buttonReset.setOnClickListener {
+            // Restart the questionnaire
+            viewModel.currentQuestion = 0
+            viewModel.answers.clear()
+            dismiss()
+            dismissAndReopen()
+        }
+
+        buttonSubmit.setOnClickListener {
+            // Submit the answers to the server
+            lifecycleScope.launch {
+                // Implement the API call here
+            }
+            dismiss()
+        }
+    }
+
+    private fun saveAnswerAndMoveToNext(answer: String, reopen: Boolean = true) {
+        Log.d("Questionnaire", "Saving answer: $answer")
         viewModel.answers.add(answer)
         viewModel.currentQuestion++
-        if (viewModel.currentQuestion < 10) {
-            updateLayoutForCurrentQuestion()
+        Log.d("Questionnaire", "Current question: ${viewModel.currentQuestion}")
+
+        if (viewModel.currentQuestion < 8) {
+            if (reopen) {
+                dismissAndReopen()
+            } else {
+                updateLayoutForCurrentQuestion()
+            }
         } else {
             submitAnswers()
         }
     }
 
     private fun updateLayoutForCurrentQuestion() {
-        val inflater = layoutInflater
+        Log.d("Questionnaire", "Updating layout for question ${viewModel.currentQuestion}")
         val container = view?.parent as? ViewGroup
-        container?.removeView(view)
-        binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
+        container?.removeView(binding.root)
+        binding = DataBindingUtil.inflate(layoutInflater, getLayoutResId(), container, false)
+        binding.lifecycleOwner = this
+        binding.setVariable(BR.viewModel, viewModel)
         container?.addView(binding.root)
         bindViews()
+    }
+
+    private fun dismissAndReopen() {
+        dismiss()
+        parentFragment?.let {
+            if (it is HomeFragment) {
+                it.openQuestionnaire(viewModel.currentQuestion)
+            }
+        }
     }
 
     private fun submitAnswers() {
@@ -240,16 +305,15 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
         dismiss()
     }
 
+    private fun updateMapLocation(latLng: LatLng, title: String) {
+        map.clear()
+        map.addMarker(MarkerOptions().position(latLng).title(title))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        viewModel.selectedLocation = latLng
+        viewModel.selectedLocationName = title
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        Log.d("QuestionnaireDialogFragment", "Map is ready") // Tambahkan log ini
-        map.setOnMapClickListener { latLng ->
-            Log.d("QuestionnaireDialogFragment", "Map clicked at: ${latLng.latitude}, ${latLng.longitude}") // Tambahkan log ini
-            map.clear()
-            map.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
-            viewModel.selectedLocation = latLng // Simpan lokasi yang dipilih ke ViewModel
-        }
-        val defaultLocation = LatLng(-34.0, 151.0)
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10f))
     }
 }

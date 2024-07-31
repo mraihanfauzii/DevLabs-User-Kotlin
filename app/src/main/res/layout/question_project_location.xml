@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/question_text"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dimana lokasi proyek anda?"
@@ -23,12 +23,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="16dp" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:queryHint="Cari lokasi"
-            app:layout_constraintTop_toBottomOf="@id/question_text"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="16dp" />
@@ -40,8 +40,9 @@
             android:layout_height="400dp"
             android:layout_margin="16dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_view" />
+            app:layout_constraintTop_toBottomOf="@+id/autocomplete_fragment" />
 
         <Button
             android:id="@+id/button_next"

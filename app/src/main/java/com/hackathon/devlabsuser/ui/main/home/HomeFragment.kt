@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.hackathon.devlabsuser.ui.ChatActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.utils.ArticleDataDummy
 import com.hackathon.devlabsuser.viewmodel.HomeViewModel
+import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
 
 class HomeFragment : Fragment() {
     private var _binding : FragmentHomeBinding? = null
@@ -27,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var articleAdapter: ArticleHomeAdapter
     private lateinit var promoAdapter: PromoAdapter
     private lateinit var homeViewModel: HomeViewModel
+    private val viewModel: QuestionnaireViewModel by viewModels({ requireParentFragment() })
     private val videoIds = listOf(
         "CNPm1fkqIjc",
         "n_fKsJhYCeE",
@@ -112,6 +115,12 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
             adapter = VideoAdapter(videoIds, viewLifecycleOwner.lifecycle)
         }
+    }
+
+    fun openQuestionnaire(questionIndex: Int) {
+        viewModel.currentQuestion = questionIndex
+        val dialogFragment = QuestionnaireDialogFragment()
+        dialogFragment.show(childFragmentManager, "QuestionnaireDialogFragment")
     }
 
     private fun showLoading(state: Boolean) {
