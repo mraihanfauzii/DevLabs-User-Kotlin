@@ -1,4 +1,4 @@
-package com.hackathon.devlabsuser.adapter.discover
+package com.hackathon.devlabsuser.adapter.discover.themes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -33,7 +33,7 @@ class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ThemesAdapter.ThemesViewHolder {
+    ): ThemesViewHolder {
         val data =
             ItemPromoCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ThemesViewHolder(data)
@@ -41,7 +41,7 @@ class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
 
     override fun getItemCount(): Int = themeList.size
 
-    override fun onBindViewHolder(holder: ThemesAdapter.ThemesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ThemesViewHolder, position: Int) {
         val theme = themeList[position]
         holder.bind(theme)
     }

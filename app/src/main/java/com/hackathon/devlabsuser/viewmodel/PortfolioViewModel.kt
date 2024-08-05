@@ -1,20 +1,14 @@
 package com.hackathon.devlabsuser.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hackathon.devlabsuser.api.ApiConfig
 import com.hackathon.devlabsuser.model.AddPortfolioData
-import com.hackathon.devlabsuser.model.AddPortfolioRequest
 import com.hackathon.devlabsuser.model.ApiResponse
 import com.hackathon.devlabsuser.model.DeleteResponse
 import com.hackathon.devlabsuser.model.Portfolio
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class PortfolioViewModel() : ViewModel() {
+class PortfolioViewModel : ViewModel() {
     private val _addPortfolio = MutableLiveData<ApiResponse<AddPortfolioData>>()
     val addPortfolio : LiveData<ApiResponse<AddPortfolioData>> = _addPortfolio
 

@@ -15,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AuthenticationViewModel() : ViewModel() {
+class AuthenticationViewModel : ViewModel() {
     private val _registerResponse = MutableLiveData<ApiResponse<RegisterData>>()
     val registerResponse : LiveData<ApiResponse<RegisterData>> = _registerResponse
 

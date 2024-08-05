@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.hackathon.devlabsuser.databinding.FragmentModelProfPictDialogBinding
 
-class ModelDialogProfPictFragment : DialogFragment() {
+class ModelProfPictDialogFragment : DialogFragment() {
     private lateinit var binding: FragmentModelProfPictDialogBinding
     private var shouldDismissDialog = false
     private var listener: OnOptionSelectedListener? = null

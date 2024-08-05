@@ -33,3 +33,21 @@ data class User(
     @field:SerializedName("profile_picture")
     val profilePicture: String?
 ) : Parcelable
+
+@Parcelize
+data class LastMessage(
+    val id: String,
+    val contact: Contact,
+    val message: String,
+    @field:SerializedName("created_at")
+    val createdAt: String
+) : Parcelable
+
+@Parcelize
+data class Contact(
+    val id: String,
+    @field:SerializedName("profile_name")
+    val profileName: String,
+    @field:SerializedName("profile_picture")
+    val profilePicture: String?
+) : Parcelable

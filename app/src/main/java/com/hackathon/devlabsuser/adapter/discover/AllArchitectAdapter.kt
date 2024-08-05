@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
-import com.hackathon.devlabsuser.databinding.ItemPromoCardBinding
+import com.hackathon.devlabsuser.databinding.ItemArchitectBinding
 import com.hackathon.devlabsuser.model.UserData
 
 class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback): RecyclerView.Adapter<AllArchitectAdapter.ArchitectListViewHolder>() {
     private var architectList = emptyList<UserData>()
 
-    inner class ArchitectListViewHolder(private val binding: ItemPromoCardBinding) :
+    inner class ArchitectListViewHolder(private val binding: ItemArchitectBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(architect: UserData) {
             binding.apply {
@@ -34,7 +34,7 @@ class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback):
         viewType: Int
     ): AllArchitectAdapter.ArchitectListViewHolder {
         val data =
-            ItemPromoCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemArchitectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArchitectListViewHolder(data)
     }
 

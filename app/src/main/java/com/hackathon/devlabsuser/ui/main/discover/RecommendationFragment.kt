@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.AllArchitectAdapter
-import com.hackathon.devlabsuser.adapter.discover.ThemesAdapter
+import com.hackathon.devlabsuser.adapter.discover.themes.ThemesAdapter
 import com.hackathon.devlabsuser.adapter.discover.TrendingPortfoliosAdapter
 import com.hackathon.devlabsuser.databinding.FragmentRecommendationBinding
 import com.hackathon.devlabsuser.model.UserData

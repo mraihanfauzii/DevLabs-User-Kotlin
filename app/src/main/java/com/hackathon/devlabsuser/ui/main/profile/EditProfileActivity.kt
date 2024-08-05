@@ -33,7 +33,7 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var authenticationManager: AuthenticationManager
     private lateinit var profileViewModel: ProfileViewModel
-    private val dialogProfPictFragment = ModelDialogProfPictFragment()
+    private val dialogProfPictFragment = ModelProfPictDialogFragment()
     private var getFile: File? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +72,7 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
                         REQUEST_CODE_PERMISSIONS
                     )
                 }
-                dialogProfPictFragment.show(supportFragmentManager, ModelDialogProfPictFragment::class.java.simpleName)
+                dialogProfPictFragment.show(supportFragmentManager, ModelProfPictDialogFragment::class.java.simpleName)
             }
             btnBatalkan.setOnClickListener {
                 finish()

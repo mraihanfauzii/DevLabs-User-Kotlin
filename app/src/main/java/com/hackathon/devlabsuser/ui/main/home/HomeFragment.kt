@@ -16,8 +16,9 @@ import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentHomeBinding
 import com.hackathon.devlabsuser.model.Article
-import com.hackathon.devlabsuser.ui.ChatActivity
+import com.hackathon.devlabsuser.ui.message.LastMessageActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
+import com.hackathon.devlabsuser.ui.authentication.LoginActivity
 import com.hackathon.devlabsuser.utils.ArticleDataDummy
 import com.hackathon.devlabsuser.viewmodel.HomeViewModel
 import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
@@ -31,11 +32,11 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private val viewModel: QuestionnaireViewModel by viewModels({ requireParentFragment() })
     private val videoIds = listOf(
-        "CNPm1fkqIjc",
-        "n_fKsJhYCeE",
-        "fxCyKIM5jKY",
-        "9TogelBk8KE",
-        "AiUEElYSAok"
+        "nwz1awsSTjI",
+        "89cYlGvpAds",
+        "c8IOB50ve7w",
+        "qbn_dAVsrXM",
+        "wSLFN_p_SZI"
     )
 
     override fun onCreateView(
@@ -84,6 +85,8 @@ class HomeFragment : Fragment() {
         homeViewModel.promo.observe(viewLifecycleOwner) {
             if (it != null) {
                 promoAdapter.getPromos(it)
+            } else {
+                startActivity(Intent(context, LoginActivity::class.java))
             }
         }
 
@@ -93,7 +96,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnChat.setOnClickListener {
-            val intent = Intent(context, ChatActivity::class.java)
+            val intent = Intent(context, LastMessageActivity::class.java)
             startActivity(intent)
         }
 

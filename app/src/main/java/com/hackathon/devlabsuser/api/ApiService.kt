@@ -6,10 +6,13 @@ import com.hackathon.devlabsuser.model.AddPortfolioData
 import com.hackathon.devlabsuser.model.AddPortfolioRequest
 import com.hackathon.devlabsuser.model.ApiResponse
 import com.hackathon.devlabsuser.model.DeleteResponse
+import com.hackathon.devlabsuser.model.LastMessage
 import com.hackathon.devlabsuser.model.LoginData
 import com.hackathon.devlabsuser.model.LoginRequest
 import com.hackathon.devlabsuser.model.Message
 import com.hackathon.devlabsuser.model.Portfolio
+import com.hackathon.devlabsuser.model.ProjectRequest
+import com.hackathon.devlabsuser.model.ProjectResponse
 import com.hackathon.devlabsuser.model.Promo
 import com.hackathon.devlabsuser.model.RegisterData
 import com.hackathon.devlabsuser.model.RegisterRequest
@@ -27,6 +30,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -65,14 +69,19 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Call<ApiResponse<List<Promo>>>
 
-    @GET("users/login")
+    @GET("messages/last")
+    fun getLastMessage (
+        @Header("Authorization") token: String,
+    ): Call<ApiResponse<List<LastMessage>>>
+
+    @GET("messages")
     fun getMessage (
         @Header("Authorization") token: String,
         @Query("first_user_id") firstUserId: String,
         @Query("second_user_id") secondUserId: String,
     ): Call<ApiResponse<List<Message>>>
 
-    @POST("users/login")
+    @POST("messages")
     fun addMessage (
         @Header("Authorization") token: String,
         @Body addMessageRequest: AddMessageRequest
@@ -98,30 +107,16 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<ApiResponse<List<Portfolio>>>
 
-    @POST("portofolios")
-    fun addPortfolio (
+    @POST("projects")
+    fun createProject(
         @Header("Authorization") token: String,
-        @Body addPortfolioRequest: AddPortfolioRequest
-    ): Call<ApiResponse<AddPortfolioData>>
+        @Path("userId") userId: String,
+        @Body request: ProjectRequest
+    ): Call<ProjectResponse>
 
     @GET("portofolios")
     fun getPortfolio (
         @Header("Authorization") token: String,
         @Query("architect_id") architectId: String,
     ): Call<ApiResponse<List<Portfolio>>>
-
-    @Multipart
-    @PUT("portofolios")
-    fun putPortfolio (
-        @Header("Authorization") token: String,
-        @Part("name") profileDescription: RequestBody,
-        @Part("description") phoneNumber: RequestBody,
-        @Part attachment_files: MultipartBody.Part
-    )
-
-    @DELETE("portofolios")
-    fun deletePortfolio (
-        @Header("Authorization") token: String,
-        @Query("architect_id") architectId: String,
-    ): Call<DeleteResponse>
 }

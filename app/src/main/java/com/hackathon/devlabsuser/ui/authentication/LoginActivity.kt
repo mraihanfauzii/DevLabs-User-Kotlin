@@ -93,6 +93,7 @@ class LoginActivity : AppCompatActivity() {
                             if (getProfileResponse != null) {
                                 Log.e("Get Profile : ", getProfileResponse.toString())
                                 login(AuthenticationManager.NAME, getProfileResponse.profileName ?: "")
+                                login(AuthenticationManager.ID, getProfileResponse.id ?: "")
                                 login(AuthenticationManager.PHONE_NUMBER, getProfileResponse.phoneNumber ?: "")
                                 login(AuthenticationManager.PROFILE_PICTURE, getProfileResponse.profilePicture ?: "")
                                 login(AuthenticationManager.PROFILE_DESCRIPTION, getProfileResponse.profileDescription ?: "Pengguna baru")

@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileViewModel() : ViewModel() {
+class ProfileViewModel : ViewModel() {
     private val _getProfileResponse = MutableLiveData<UserData>()
     val getProfileResponse : LiveData<UserData> = _getProfileResponse
     private val _putProfileResponse = MutableLiveData<ApiResponse<UpdateProfileData>>()

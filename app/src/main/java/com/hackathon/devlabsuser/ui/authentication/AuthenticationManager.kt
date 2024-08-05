@@ -41,6 +41,7 @@ class AuthenticationManager(context: Context) {
     companion object {
         // Data User
         const val PREFS = "prefs"
+        const val ID = "id"
         const val SESSION = "session"
         const val TOKEN = "token"
         const val EMAIL = "email"

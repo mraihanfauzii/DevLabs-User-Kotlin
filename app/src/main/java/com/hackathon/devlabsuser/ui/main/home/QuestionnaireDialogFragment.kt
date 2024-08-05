@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,10 +27,15 @@ import com.hackathon.devlabsuser.databinding.*
 import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
 import kotlinx.coroutines.launch
 import com.hackathon.devlabsuser.BR
+import com.hackathon.devlabsuser.model.ProjectRequest
+import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
+import com.hackathon.devlabsuser.viewmodel.HomeViewModel
 
 class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
     private val viewModel: QuestionnaireViewModel by viewModels({ requireParentFragment() })
+    private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+    private lateinit var authManager: AuthenticationManager
     private lateinit var binding: ViewDataBinding
     private lateinit var map: GoogleMap
 
@@ -65,6 +70,14 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), "AIzaSyA82FIXRqsMilx4QkwhAOyobGC5H8TtjeA")
         }
+
+        authManager = AuthenticationManager(requireContext())
+
+        homeViewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
 
         bindViews()
     }
@@ -253,10 +266,7 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
         buttonSubmit.setOnClickListener {
             // Submit the answers to the server
-            lifecycleScope.launch {
-                // Implement the API call here
-            }
-            dismiss()
+            submitAnswers()
         }
     }
 
@@ -298,11 +308,35 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
     }
 
     private fun submitAnswers() {
-        // Send the answers to the server
-        lifecycleScope.launch {
-            // Implement the API call here
+        // Pastikan bahwa `viewModel.answers` memiliki semua jawaban
+        val projectRequest = ProjectRequest(
+            projectName = "Rumah kedua",
+            name = viewModel.answers[0], // Jasa
+            lat = viewModel.selectedLocation?.latitude ?: 0.0,
+            long = viewModel.selectedLocation?.longitude ?: 0.0,
+            type = viewModel.answers[2], // Kebutuhan
+            buildingType = viewModel.answers[3], // Tipe Bangunan
+            area = viewModel.answers[4].substringAfter("Luas Bangunan: ").toIntOrNull() ?: 0,
+            numFloor = viewModel.answers[5].substringAfter("Jumlah Lantai: ").toIntOrNull() ?: 0,
+            numPerson = viewModel.answers[6].substringAfter("Jumlah Penghuni: ").toIntOrNull() ?: 0,
+            numRoom = viewModel.answers[7].substringAfter("Jumlah Kamar: ").toIntOrNull() ?: 0,
+            numBathroom = viewModel.answers[8].substringAfter("Jumlah Kamar Mandi: ").toIntOrNull() ?: 0,
+            theme = viewModel.answers[9], // Tema
+            budget = "251 juta - 500 juta",
+            buildingTime = "2024-07-17",
+            notes = "buat rumah yang cepettttt"
+        )
+        val userId = "a67a265a-6f6f-49c0-95c1-f3f19e045a8b"
+
+        val getToken = authManager.getAccess(AuthenticationManager.TOKEN).toString()
+        val token = "Bearer $getToken"
+
+        homeViewModel.submitProject(token, userId, projectRequest)
+        homeViewModel.projectResponse.observe(viewLifecycleOwner) {
+            if (it != null) {
+                dismiss()
+            }
         }
-        dismiss()
     }
 
     private fun updateMapLocation(latLng: LatLng, title: String) {

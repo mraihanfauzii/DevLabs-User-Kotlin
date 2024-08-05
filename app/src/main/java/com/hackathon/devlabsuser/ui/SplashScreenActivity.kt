@@ -49,6 +49,7 @@ class SplashScreenActivity : AppCompatActivity() {
                             Log.e("Get Profile : ", getProfile.toString())
                             login(AuthenticationManager.NAME, getProfile.profileName ?: "")
                             login(AuthenticationManager.PHONE_NUMBER, getProfile.phoneNumber ?: "")
+                            login(AuthenticationManager.ID, getProfile.id ?: "")
                             login(AuthenticationManager.PROFILE_PICTURE, getProfile.profilePicture ?: "")
                             login(AuthenticationManager.PROFILE_DESCRIPTION, getProfile.profileDescription ?: "Pengguna baru")
                         }
