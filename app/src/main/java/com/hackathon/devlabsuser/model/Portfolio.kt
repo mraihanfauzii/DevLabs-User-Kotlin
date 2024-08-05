@@ -5,18 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class AddPortfolioRequest(
-    val name: String,
-    val description: String,
-    @field:SerializedName("attachment_files")
-    val attachmentFiles: List<String>
-) : Parcelable
-
-data class AddPortfolioData(
-    val id: String
-)
-
-@Parcelize
 data class Portfolio(
     val id: String,
     val architect: Architect,
@@ -28,7 +16,19 @@ data class Portfolio(
     @field:SerializedName("created_at")
     val createdAt: String,
     @field:SerializedName("click_count")
-    val clickCount: String
+    val clickCount: String,
+    val attachments: List<Attachments>?
+) : Parcelable
+
+@Parcelize
+data class Attachments(
+    val id: String,
+    @field:SerializedName("portfolio_id")
+    val portfolioId: String,
+    val name: String,
+    val path: String,
+    @field:SerializedName("created_at")
+    val createdAt: String
 ) : Parcelable
 
 @Parcelize

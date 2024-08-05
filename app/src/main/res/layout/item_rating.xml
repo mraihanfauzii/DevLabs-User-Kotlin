@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivRaterProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tvRaterName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivRaterProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingStart="8dp" />
+
+    <TextView
+        android:id="@+id/tvRatingDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvRaterName"
+        app:layout_constraintStart_toEndOf="@id/ivRaterProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingStart="8dp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvRatingDescription"
+        app:layout_constraintStart_toEndOf="@id/ivRaterProfile"
+        android:isIndicator="true" />
+
+    <ImageView
+        android:id="@+id/ivAttachment"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/ratingBar"
+        app:layout_constraintStart_toEndOf="@id/ivRaterProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="centerCrop" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

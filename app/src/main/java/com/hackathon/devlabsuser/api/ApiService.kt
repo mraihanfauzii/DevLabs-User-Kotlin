@@ -2,9 +2,8 @@ package com.hackathon.devlabsuser.api
 
 import com.hackathon.devlabsuser.model.AddMessageData
 import com.hackathon.devlabsuser.model.AddMessageRequest
-import com.hackathon.devlabsuser.model.AddPortfolioData
-import com.hackathon.devlabsuser.model.AddPortfolioRequest
 import com.hackathon.devlabsuser.model.ApiResponse
+import com.hackathon.devlabsuser.model.AverageRating
 import com.hackathon.devlabsuser.model.DeleteResponse
 import com.hackathon.devlabsuser.model.LastMessage
 import com.hackathon.devlabsuser.model.LoginData
@@ -14,6 +13,7 @@ import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.model.ProjectRequest
 import com.hackathon.devlabsuser.model.ProjectResponse
 import com.hackathon.devlabsuser.model.Promo
+import com.hackathon.devlabsuser.model.Rating
 import com.hackathon.devlabsuser.model.RegisterData
 import com.hackathon.devlabsuser.model.RegisterRequest
 import com.hackathon.devlabsuser.model.Theme
@@ -119,4 +119,16 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("architect_id") architectId: String,
     ): Call<ApiResponse<List<Portfolio>>>
+
+    @GET("ratings/ratee/{architect_id}")
+    fun getRatings(
+        @Header("Authorization") token: String,
+        @Path("architect_id") architectId: String
+    ): Call<ApiResponse<List<Rating>>>
+
+    @GET("ratings/ratee/{architect_id}/average")
+    fun getRatingsAverage(
+        @Header("Authorization") token: String,
+        @Path("architect_id") architectId: String
+    ): Call<ApiResponse<AverageRating>>
 }
