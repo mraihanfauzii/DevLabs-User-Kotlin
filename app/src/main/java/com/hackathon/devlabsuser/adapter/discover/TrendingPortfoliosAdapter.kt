@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
+import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.ItemPromoCardBinding
 import com.hackathon.devlabsuser.model.Portfolio
 
@@ -49,6 +50,10 @@ class TrendingPortfoliosAdapter: RecyclerView.Adapter<TrendingPortfoliosAdapter.
     fun getTrendingPortfolios(newPortfolio: List<Portfolio>) {
         trendingPortfolioList = newPortfolio
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: TrendingPortfoliosAdapter.OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {

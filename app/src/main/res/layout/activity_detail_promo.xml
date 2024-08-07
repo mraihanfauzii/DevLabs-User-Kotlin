@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.architect.DetailPortfolioActivity">
+    tools:context=".ui.main.home.DetailPromoActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -73,61 +73,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_cardView" />
-            <LinearLayout
-                android:id="@+id/linearlayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_articleTitle">
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/outline_remove_red_eye"
-                    android:layout_marginStart="16dp"
-                    android:layout_gravity="center"/>
 
-                <TextView
-                    android:id="@+id/tv_click_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_gravity="center"
-                    android:text="4.4k views"
-                    android:textSize="15sp" />
-
-                <ToggleButton
-                    android:id="@+id/toggle_favorite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:textOn=""
-                    android:textOff=""
-                    android:background="@drawable/ic_favorite_before"
-                    android:focusableInTouchMode="false"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_created_at"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_gravity="center"
-                    android:text="7 Agustus 2024"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tv_theme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_gravity="center"
-                    android:text="Tema"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
             <TextView
                 android:id="@+id/tv_storyDescription"
                 android:layout_width="match_parent"
@@ -141,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearlayout"
+                app:layout_constraintTop_toBottomOf="@+id/tv_articleTitle"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -17,17 +17,17 @@ class ArchitectViewModel : ViewModel() {
     private val _getPortfolio = MutableLiveData<ApiResponse<List<Portfolio>>>()
     val getPortfolio : LiveData<ApiResponse<List<Portfolio>>> = _getPortfolio
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> get() = _errorMessage
-
     private val _ratings = MutableLiveData<List<Rating>>()
     val ratings: LiveData<List<Rating>> = _ratings
 
     private val _ratingsAverage = MutableLiveData<AverageRating>()
     val ratingsAverage : LiveData<AverageRating> = _ratingsAverage
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
 
     fun getPortfolio(token: String, architectId: String){
         _isLoading.value = true

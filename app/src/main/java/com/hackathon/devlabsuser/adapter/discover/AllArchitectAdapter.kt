@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ItemArchitectBinding
+import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
 import com.hackathon.devlabsuser.model.UserData
 
 class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback): RecyclerView.Adapter<AllArchitectAdapter.ArchitectListViewHolder>() {
     private var architectList = emptyList<UserData>()
 
-    inner class ArchitectListViewHolder(private val binding: ItemArchitectBinding) :
+    inner class ArchitectListViewHolder(private val binding: ItemArticleHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(architect: UserData) {
             binding.apply {
@@ -19,8 +20,8 @@ class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback):
                     .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz"+architect.profilePicture)
                     .centerCrop()
                     .placeholder(R.drawable.contoh_profile)
-                    .into(imgPromoThumbnail)
-                tvPromoTitle.text = architect.profileName
+                    .into(imgArticleThumbnail)
+                tvArticleTitle.text = architect.profileName
 
                 root.setOnClickListener {
                     onItemClickCallback.onItemClicked(architect)
@@ -34,7 +35,7 @@ class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback):
         viewType: Int
     ): AllArchitectAdapter.ArchitectListViewHolder {
         val data =
-            ItemArchitectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemArticleHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArchitectListViewHolder(data)
     }
 

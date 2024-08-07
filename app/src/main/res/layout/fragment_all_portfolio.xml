@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.main.discover.LatestPortfolioFragment">
+    tools:context=".ui.main.discover.AllPortfolioFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -17,9 +17,10 @@
         android:layout_marginTop="24dp">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_nama_lengkap"
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="Cari Judul"
+            android:hint="Cari Portofolio"
+            android:layout_gravity="center"
             app:boxCornerRadiusBottomEnd="30dp"
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopEnd="30dp"
@@ -31,6 +32,13 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnSort"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="16dp"
+            android:drawableTop="@drawable/baseline_sort_24"
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -16,6 +16,7 @@ import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentHomeBinding
 import com.hackathon.devlabsuser.model.Article
+import com.hackathon.devlabsuser.model.Promo
 import com.hackathon.devlabsuser.ui.message.LastMessageActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.ui.authentication.LoginActivity
@@ -58,6 +59,16 @@ class HomeFragment : Fragment() {
         articleAdapter = ArticleHomeAdapter()
         promoAdapter = PromoAdapter()
         promoAdapter.notifyDataSetChanged()
+        promoAdapter.setOnItemClickCallback(object: PromoAdapter.OnItemClickCallback {
+            override fun onItemClicked(promo: Promo) {
+                Intent(context, DetailPromoActivity::class.java).also {
+                    it.putExtra(DetailPromoActivity.PHOTO_URL,promo.img)
+                    it.putExtra(DetailPromoActivity.TITLE, promo.name)
+                    it.putExtra(DetailPromoActivity.DESCRIPTION, "Perlu ditambah detail deskripsi promo di API-nya")
+                    startActivity(it)
+                }
+            }
+        })
         articleAdapter.getArticles(ArticleDataDummy.listArticle)
         articleAdapter.setOnItemClickCallback(object: ArticleHomeAdapter.OnItemClickCallback {
             override fun onItemClicked(article: Article) {

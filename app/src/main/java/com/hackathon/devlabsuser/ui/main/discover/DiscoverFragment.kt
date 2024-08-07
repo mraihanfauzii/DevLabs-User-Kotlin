@@ -34,9 +34,9 @@ class DiscoverFragment : Fragment() {
             ViewPager.adapter = viewPagerAdapter
             TabLayoutMediator(TabLayout, ViewPager) { tab, position ->
                 when (position) {
-                    0 -> tab.text = "Rekomendasi"
-                    1 -> tab.text = "Terbaru"
-                    2 -> tab.text = "Trending"
+                    0 -> tab.text = "Trending"
+                    1 -> tab.text = "Portofolio"
+                    2 -> tab.text = "Arsitek"
                 }
             }.attach()
         }

@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.databinding.ItemPortfolioBinding
+import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.model.Portfolio
 
 class PortfolioAdapter(private var portfolios: List<Portfolio>) : RecyclerView.Adapter<PortfolioAdapter.PortfolioViewHolder>() {
+    private lateinit var onItemClickCallback: PortfolioAdapter.OnItemClickCallback
 
     inner class PortfolioViewHolder(private val binding: ItemPortfolioBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(portfolio: Portfolio) {
@@ -17,6 +20,10 @@ class PortfolioAdapter(private var portfolios: List<Portfolio>) : RecyclerView.A
                 Glide.with(ivPortfolioTheme.context)
                     .load(portfolio.attachments?.firstOrNull()?.path)
                     .into(ivPortfolioTheme)
+
+                root.setOnClickListener {
+                    onItemClickCallback.onItemClicked(portfolio)
+                }
             }
         }
     }
@@ -35,5 +42,13 @@ class PortfolioAdapter(private var portfolios: List<Portfolio>) : RecyclerView.A
     fun updatePortfolios(newPortfolios: List<Portfolio>) {
         portfolios = newPortfolios
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(portfolio: Portfolio)
     }
 }

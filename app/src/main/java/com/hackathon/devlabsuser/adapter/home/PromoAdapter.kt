@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.databinding.ItemPromoCardBinding
 import com.hackathon.devlabsuser.model.Promo
 
@@ -31,7 +32,7 @@ class PromoAdapter: RecyclerView.Adapter<PromoAdapter.PromoListViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PromoAdapter.PromoListViewHolder {
+    ): PromoListViewHolder {
         val data =
             ItemPromoCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PromoListViewHolder(data)
@@ -39,7 +40,7 @@ class PromoAdapter: RecyclerView.Adapter<PromoAdapter.PromoListViewHolder>() {
 
     override fun getItemCount(): Int = promoList.size
 
-    override fun onBindViewHolder(holder: PromoAdapter.PromoListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PromoListViewHolder, position: Int) {
         val promo = promoList[position]
         holder.bind(promo)
     }
@@ -47,6 +48,10 @@ class PromoAdapter: RecyclerView.Adapter<PromoAdapter.PromoListViewHolder>() {
     fun getPromos(newPromo: List<Promo>) {
         promoList = newPromo
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: PromoAdapter.OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {

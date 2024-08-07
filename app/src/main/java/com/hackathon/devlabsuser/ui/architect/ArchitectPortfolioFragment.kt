@@ -1,5 +1,6 @@
 package com.hackathon.devlabsuser.ui.architect
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.architect.PortfolioAdapter
+import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.databinding.FragmentArchitectPortfolioBinding
+import com.hackathon.devlabsuser.model.Article
+import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
+import com.hackathon.devlabsuser.ui.main.home.DetailArticleActivity
 import com.hackathon.devlabsuser.viewmodel.ArchitectViewModel
 
 class ArchitectPortfolioFragment : Fragment() {
@@ -35,6 +40,18 @@ class ArchitectPortfolioFragment : Fragment() {
         authenticationManager = AuthenticationManager(requireContext())
 
         portfolioAdapter = PortfolioAdapter(emptyList())
+//        portfolioAdapter.setOnItemClickCallback(object: PortfolioAdapter.OnItemClickCallback {
+//            override fun onItemClicked(portfolio: Portfolio) {
+//                Intent(context, DetailArticleActivity::class.java).also {
+//                    it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
+//                    it.putExtra(DetailArticleActivity.TITLE, article.title)
+//                    it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
+//                    it.putExtra(DetailArticleActivity.ID, article.id.toString())
+//                    startActivity(it)
+//                }
+//            }
+//        })
+
         binding.rvPortfolios.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPortfolios.adapter = portfolioAdapter
 

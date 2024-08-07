@@ -21,6 +21,12 @@
         android:theme="@style/Theme.DevlabsUser"
         tools:targetApi="31" >
         <activity
+            android:name=".ui.main.home.DetailPromoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.home.DiscountActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.message.MessageActivity"
             android:exported="false" />
 
