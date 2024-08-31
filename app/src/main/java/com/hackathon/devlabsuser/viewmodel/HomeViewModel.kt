@@ -9,6 +9,8 @@ import com.hackathon.devlabsuser.model.ApiResponse
 import com.hackathon.devlabsuser.model.ProjectRequest
 import com.hackathon.devlabsuser.model.ProjectResponse
 import com.hackathon.devlabsuser.model.Promo
+import com.hackathon.devlabsuser.model.RecArchitect
+import com.hackathon.devlabsuser.model.RecommendedArchitectsRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +27,9 @@ class HomeViewModel : ViewModel() {
 
     private val _projectResponse = MutableLiveData<ProjectResponse>()
     val projectResponse: LiveData<ProjectResponse> get() = _projectResponse
+
+    private val _recArchitectResponse = MutableLiveData<List<RecArchitect>>()
+    val recArchitectResponse: LiveData<List<RecArchitect>> get() = _recArchitectResponse
 
     fun getPromo(token: String){
         _isLoading.value = true
@@ -74,5 +79,28 @@ class HomeViewModel : ViewModel() {
         })
     }
 
+    fun getRecommendedArchitects(token: String,request: RecommendedArchitectsRequest) {
+        _isLoading.value = true // Tampilkan indikator loading
+        ApiConfig.getApiService().getRecommendedArchitects(token ,request).enqueue(object : Callback<ApiResponse<List<RecArchitect>>> {
+            override fun onResponse(call: Call<ApiResponse<List<RecArchitect>>>, response: Response<ApiResponse<List<RecArchitect>>>) {
+                _isLoading.value = false // Sembunyikan indikator loading
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse?.success == true) {
+                        _recArchitectResponse.value = apiResponse.data
+                    } else {
+                        _errorMessage.value = apiResponse?.message ?: "Terjadi kesalahan."
+                    }
+                } else {
+                    _errorMessage.value = "Gagal mengambil data. Kode error: ${response.code()}"
+                }
+            }
 
+            override fun onFailure(call: Call<ApiResponse<List<RecArchitect>>>, t: Throwable) {
+                _isLoading.value = false // Sembunyikan indikator loading
+                _errorMessage.value = "Terjadi kesalahan jaringan. Silakan coba lagi nanti."
+                t.printStackTrace() // Untuk keperluan debugging
+            }
+        })
+    }
 }

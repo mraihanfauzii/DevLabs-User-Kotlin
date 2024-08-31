@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnDesainBangun.setOnClickListener {
-            val dialog = QuestionnaireDialogFragment()
+            val dialog = QuestionnaireRecomDialogFragment()
             dialog.show(childFragmentManager, "QuestionnaireDialogFragment")
         }
 

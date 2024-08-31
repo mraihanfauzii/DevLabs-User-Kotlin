@@ -65,10 +65,10 @@ class ArchitectActivity : AppCompatActivity() {
 
         binding.apply {
             fabPesan.setOnClickListener {
-                val questionnaireFragment = QuestionnaireDialogFragment()
-                val bundle = Bundle()
-                bundle.putString("architect_id", id) // 'id' adalah architect_id yang didapat dari Intent
-                questionnaireFragment.arguments = bundle
+                val questionnaireFragment = QuestionnaireDialogFragment() // Buat instance fragment
+
+                viewModel.architectId = id
+                // Tampilkan dialog fragment
                 questionnaireFragment.show(supportFragmentManager, "QuestionnaireDialogFragment")
             }
             tvUserName.text = profileName ?: "Unknown"

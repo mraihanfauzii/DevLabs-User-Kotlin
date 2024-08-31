@@ -1,5 +1,6 @@
 package com.hackathon.devlabsuser.ui.main.home
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ import com.hackathon.devlabsuser.model.ProjectRequest
 import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.viewmodel.HomeViewModel
+import java.util.Calendar
 
 class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
@@ -63,7 +65,9 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
             4 -> R.layout.question_building_area_and_num_floors
             5 -> R.layout.question_combined
             6 -> R.layout.question_theme
-            7 -> R.layout.question_summary
+            7 -> R.layout.question_project_name_budget_building_time
+            8 -> R.layout.question_notes
+            9 -> R.layout.question_summary
             else -> throw IllegalArgumentException("Invalid question index")
         }
     }
@@ -99,7 +103,10 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
             4 -> setupQuestion5and6()
             5 -> setupQuestion7to9()
             6 -> setupQuestion10()
-            7 -> setupSummary()
+
+            7 -> setupQuestion11to13()
+            8 -> setupQuestion14()
+            9 -> setupSummary()
         }
     }
 
@@ -236,6 +243,56 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
         }
     }
 
+    private fun setupQuestion11to13() {
+        val questionBinding = binding as QuestionProjectNameBudgetBuildingTimeBinding
+        val priceSpinner = questionBinding.priceSpinner
+        val tvDate = questionBinding.tvDate
+        val projectName = questionBinding.inputProjectName
+
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, monthOfYear, dayOfMonth ->
+                val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
+                tvDate.text = "Tanggal yang dipilih: $selectedDate"
+                viewModel.buildingTime = selectedDate // Inisialisasi nilai buildingTime
+            }, year, month, day)
+
+        questionBinding.btnSelectDate.setOnClickListener {
+            datePickerDialog.show()
+        }
+
+        questionBinding.buttonNext.setOnClickListener {
+            val budget = priceSpinner.selectedItem.toString()
+            if (budget.isEmpty() || projectName.text.toString().isEmpty() || viewModel.buildingTime == null) {
+                Toast.makeText(requireContext(), "Isi semua pertanyaan!", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.projectName = projectName.text.toString()
+                viewModel.budget = budget
+
+                saveAnswerAndMoveToNext("next")
+            }
+        }
+    }
+
+    private fun setupQuestion14() {
+        val questionBinding = binding as QuestionNotesBinding
+        val inputNotes = questionBinding.inputNotes
+
+        questionBinding.buttonNext.setOnClickListener {
+            if (inputNotes.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Masukkan notes !", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.notes = inputNotes.text.toString()
+                saveAnswerAndMoveToNext("Notes ${inputNotes.text.toString()}")
+            }
+        }
+    }
+
     private fun setupSummary() {
         val questionBinding = binding as QuestionSummaryBinding
         val summaryText = questionBinding.summaryText
@@ -284,7 +341,7 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
         viewModel.currentQuestion++
         Log.d("Questionnaire", "Current question: ${viewModel.currentQuestion}")
 
-        if (viewModel.currentQuestion < 8) {
+        if (viewModel.currentQuestion < 10) {
             if (reopen) {
                 dismissAndReopen()
             } else {
@@ -320,7 +377,7 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
             val answers = viewModel.answers
 
             // Pastikan list `answers` memiliki semua jawaban yang diperlukan
-            if (answers.size < 7) { // Check if there are 8 answers
+            if (answers.size < 9) { // Check if there are 10 answers
                 Log.e("QuestionnaireDialogFragment", "Insufficient number of answers. 8 answers are required, but only ${answers.size} were provided.")
                 Toast.makeText(context, "Make sure all questions have been answered.", Toast.LENGTH_SHORT).show()
                 return
@@ -328,7 +385,6 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
             // Membuat ProjectRequest sesuai dengan format yang diperlukan oleh API
             val projectRequest = ProjectRequest(
-                projectName = "Rumah pertama",
                 name = answers[0], // Jenis Layanan
                 lat = viewModel.selectedLocation?.latitude ?: 0.0,
                 long = viewModel.selectedLocation?.longitude ?: 0.0,
@@ -340,9 +396,10 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
                 numBathroom = answers[6].substringAfter("Jumlah Kamar Mandi: ").toIntOrNull() ?: 0,
                 numFloor = answers[4].substringAfter("Jumlah Lantai: ").toIntOrNull() ?: 0,
                 theme = answers[6].substringBefore(",").substringAfter("Tema: "), // Tema (ambil dari awal hingga koma)
-                budget = "251 juta - 500 juta",
-                buildingTime = "2024-07-17",
-                notes = "buat rumah yang cepettttt"
+                projectName = viewModel.projectName!!,
+                budget = viewModel.budget!!,
+                buildingTime = viewModel.buildingTime!!,
+                notes = viewModel.notes!!
             )
 
 
@@ -351,8 +408,10 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
             val getToken = authManager.getAccess(AuthenticationManager.TOKEN).toString()
             val token = "Bearer $getToken"
 
+            var id = viewModel.architectId
+
             // Mengirim permintaan untuk membuat proyek baru
-            homeViewModel.submitProject(token, "architect_id", projectRequest)
+            homeViewModel.submitProject(token, id!!, projectRequest)
             homeViewModel.projectResponse.observe(viewLifecycleOwner) {
                 if (it != null) {
                     dismiss() // Menutup dialog setelah pengiriman berhasil

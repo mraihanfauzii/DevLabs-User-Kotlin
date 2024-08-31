@@ -88,4 +88,12 @@
         <item>Tropical</item>
         <item>Victorian</item>
     </string-array>
+
+    <string-array name="price_array">
+        <item>251 juta - 500 juta</item>
+        <item>501 juta - 750 juta</item>
+        <item>751 juta - 1 miliar</item>
+        <item>1,5 miliar - 2 miliar</item>
+        <item>2,1 miliar - 3 miliar</item>
+    </string-array>
 </resources>

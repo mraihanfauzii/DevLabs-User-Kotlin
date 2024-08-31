@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan luas area yang direncanakan !"
+        android:paddingBottom="8dp" />
+
+    <EditText
+        android:id="@+id/input_project_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="1000"
+        android:inputType="number"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan lokasi kota project !"
+        android:paddingBottom="8dp" />
+
+    <EditText
+        android:id="@+id/input_project_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bandung"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan tema project anda !"
+        android:paddingBottom="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/price_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/theme_array"
+
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan rentang budget anda"
+        android:paddingBottom="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/price_spinnerr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/price_array"
+
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selanjutnya"
+        android:padding="16dp"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

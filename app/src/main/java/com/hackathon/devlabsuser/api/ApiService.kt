@@ -15,6 +15,8 @@ import com.hackathon.devlabsuser.model.ProjectRequest
 import com.hackathon.devlabsuser.model.ProjectResponse
 import com.hackathon.devlabsuser.model.Promo
 import com.hackathon.devlabsuser.model.Rating
+import com.hackathon.devlabsuser.model.RecArchitect
+import com.hackathon.devlabsuser.model.RecommendedArchitectsRequest
 import com.hackathon.devlabsuser.model.RegisterData
 import com.hackathon.devlabsuser.model.RegisterRequest
 import com.hackathon.devlabsuser.model.Theme
@@ -137,4 +139,15 @@ interface ApiService {
     fun getProjectsByUserId(
         @Header("Authorization") token: String
     ): Call<ApiResponse<List<Project>>>
+
+    @POST("projects/recommended-architects")
+    fun getRecommendedArchitects(
+        @Header("Authorization") token: String,
+        @Body request: RecommendedArchitectsRequest
+    ): Call<ApiResponse<List<RecArchitect>>>
+
+    @GET("payments")
+    fun getPayments (
+        @Header("Authorization") token: String,
+    ): Call<ApiResponse<List<Portfolio>>>
 }
