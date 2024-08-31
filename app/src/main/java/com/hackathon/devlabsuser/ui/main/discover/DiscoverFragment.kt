@@ -37,6 +37,7 @@ class DiscoverFragment : Fragment() {
                     0 -> tab.text = "Trending"
                     1 -> tab.text = "Portofolio"
                     2 -> tab.text = "Arsitek"
+                    3 -> tab.text = "Kontraktor"
                 }
             }.attach()
         }

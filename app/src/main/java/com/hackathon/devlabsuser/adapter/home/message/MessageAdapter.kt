@@ -14,7 +14,7 @@ class MessageAdapter(private var messages: List<Message>) : RecyclerView.Adapter
         fun bind(message: Message) {
             binding.tvMessage.text = message.message
             binding.tvTimestamp.text = DateUtils.formatTimestamp(message.createdAt)
-            binding.tvUserName.text = message.sender.profileName
+            binding.tvUserName.text = message.sender.profileName ?: "Unknown"
             Glide.with(binding.ivUserProfile.context)
                 .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz" + message.sender.profilePicture)
                 .into(binding.ivUserProfile)

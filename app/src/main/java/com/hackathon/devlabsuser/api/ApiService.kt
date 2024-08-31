@@ -10,6 +10,7 @@ import com.hackathon.devlabsuser.model.LoginData
 import com.hackathon.devlabsuser.model.LoginRequest
 import com.hackathon.devlabsuser.model.Message
 import com.hackathon.devlabsuser.model.Portfolio
+import com.hackathon.devlabsuser.model.Project
 import com.hackathon.devlabsuser.model.ProjectRequest
 import com.hackathon.devlabsuser.model.ProjectResponse
 import com.hackathon.devlabsuser.model.Promo
@@ -107,7 +108,7 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<ApiResponse<List<Portfolio>>>
 
-    @POST("projects")
+    @POST("projects/{userId}")
     fun createProject(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
@@ -131,4 +132,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("architect_id") architectId: String
     ): Call<ApiResponse<AverageRating>>
+
+    @GET("projects")
+    fun getProjectsByUserId(
+        @Header("Authorization") token: String
+    ): Call<ApiResponse<List<Project>>>
 }

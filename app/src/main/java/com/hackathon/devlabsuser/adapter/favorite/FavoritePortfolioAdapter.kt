@@ -5,23 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
-import com.hackathon.devlabsuser.model.Article
+import com.hackathon.devlabsuser.model.Portfolio
 
-class FavoritePortfolioAdapter: RecyclerView.Adapter<FavoritePortfolioAdapter.ArticleListViewHolder>() {
+class FavoritePortfolioAdapter: RecyclerView.Adapter<FavoritePortfolioAdapter.PortfolioListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private var articleList = emptyList<Article>()
-    inner class ArticleListViewHolder(private val binding: ItemArticleHorizontalBinding): RecyclerView.ViewHolder(binding.root) {
-        fun getArticle(article: Article) {
+    private var portfolioList = emptyList<Portfolio>()
+    inner class PortfolioListViewHolder(private val binding: ItemArticleHorizontalBinding): RecyclerView.ViewHolder(binding.root) {
+        fun getPortfolio(portfolio: Portfolio) {
             binding.apply {
                 Glide.with(itemView)
-                    .load(article.photoUrl)
+                    .load(portfolio.theme?.image)
                     .centerCrop()
                     .into(imgArticleThumbnail)
-                tvArticleTitle.text = article.title
-                tvStoriesDescription.text = article.description
+                tvArticleTitle.text = portfolio.name
+                tvStoriesDescription.text = portfolio.description
 
                 root.setOnClickListener {
-                    onItemClickCallback.onItemClicked(article)
+                    onItemClickCallback.onItemClicked(portfolio)
                 }
             }
         }
@@ -30,19 +30,19 @@ class FavoritePortfolioAdapter: RecyclerView.Adapter<FavoritePortfolioAdapter.Ar
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FavoritePortfolioAdapter.ArticleListViewHolder {
+    ): FavoritePortfolioAdapter.PortfolioListViewHolder {
         val data = ItemArticleHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ArticleListViewHolder(data)
+        return PortfolioListViewHolder(data)
     }
 
-    override fun onBindViewHolder(holder: FavoritePortfolioAdapter.ArticleListViewHolder, position: Int) {
-        holder.getArticle(articleList[position])
+    override fun onBindViewHolder(holder: FavoritePortfolioAdapter.PortfolioListViewHolder, position: Int) {
+        holder.getPortfolio(portfolioList[position])
     }
 
-    override  fun getItemCount(): Int = articleList.size
+    override  fun getItemCount(): Int = portfolioList.size
 
-    fun getArticles(listArticle: List<Article>) {
-        articleList = listArticle
+    fun getPortfolios(listPortfolio: List<Portfolio>) {
+        portfolioList = listPortfolio
         notifyDataSetChanged()
     }
 
@@ -51,6 +51,6 @@ class FavoritePortfolioAdapter: RecyclerView.Adapter<FavoritePortfolioAdapter.Ar
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(article: Article)
+        fun onItemClicked(portfolio: Portfolio)
     }
 }

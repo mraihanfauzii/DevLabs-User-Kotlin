@@ -95,7 +95,6 @@ class EditProfileActivity : AppCompatActivity(), OnOptionSelectedListener {
                 profileViewModel.putProfileResponse.observe(this@EditProfileActivity) { putProfile ->
                     if (putProfile != null) {
                         authenticationManager.apply {
-                            Log.e("Get Profile : ", putProfile.toString())
                             login(AuthenticationManager.NAME, inputNamaLengkap)
                             login(AuthenticationManager.PHONE_NUMBER, inputNomorTelepon)
                             login(AuthenticationManager.PROFILE_PICTURE, "")

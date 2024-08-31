@@ -4,13 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.databinding.ItemPortfolioBinding
-import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.model.Portfolio
 
 class PortfolioAdapter(private var portfolios: List<Portfolio>) : RecyclerView.Adapter<PortfolioAdapter.PortfolioViewHolder>() {
-    private lateinit var onItemClickCallback: PortfolioAdapter.OnItemClickCallback
+    private lateinit var onItemClickCallback: OnItemClickCallback
 
     inner class PortfolioViewHolder(private val binding: ItemPortfolioBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(portfolio: Portfolio) {
@@ -18,7 +16,7 @@ class PortfolioAdapter(private var portfolios: List<Portfolio>) : RecyclerView.A
                 tvPortfolioName.text = portfolio.name
                 tvPortfolioDescription.text = portfolio.description
                 Glide.with(ivPortfolioTheme.context)
-                    .load(portfolio.attachments?.firstOrNull()?.path)
+                    .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz" + portfolio.attachments?.firstOrNull()?.path)
                     .into(ivPortfolioTheme)
 
                 root.setOnClickListener {

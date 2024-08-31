@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ItemMessageBinding
 import com.hackathon.devlabsuser.model.LastMessage
 import com.hackathon.devlabsuser.utils.DateUtils
@@ -15,10 +16,16 @@ class LastMessageAdapter(private var messages: List<LastMessage>) : RecyclerView
             binding.apply {
                 tvMessage.text = message.message
                 tvTimestamp.text = DateUtils.formatTimestamp(message.createdAt)
-                tvUserName.text = message.contact.profileName
-                Glide.with(ivUserProfile.context)
-                    .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz"+message.contact.profilePicture)
-                    .into(ivUserProfile)
+
+                if (message.contact != null) {
+                    tvUserName.text = message.contact.profileName ?: "Unknown"
+                    Glide.with(ivUserProfile.context)
+                        .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz"+message.contact.profilePicture)
+                        .into(ivUserProfile)
+                } else {
+                    tvUserName.text = "Unknown"
+                    ivUserProfile.setImageResource(R.drawable.ic_favorite_before)
+                }
 
                 root.setOnClickListener {
                     onItemClickCallback.onItemClicked(message)

@@ -28,13 +28,18 @@ import com.hackathon.devlabsuser.viewmodel.QuestionnaireViewModel
 import kotlinx.coroutines.launch
 import com.hackathon.devlabsuser.BR
 import com.hackathon.devlabsuser.model.ProjectRequest
+import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.viewmodel.HomeViewModel
 
 class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
-    private val viewModel: QuestionnaireViewModel by viewModels({ requireParentFragment() })
-    private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: QuestionnaireViewModel by viewModels({
+        if (parentFragment != null) requireParentFragment() else requireActivity()
+    })
+    private val homeViewModel: HomeViewModel by viewModels({
+        if (parentFragment != null) requireParentFragment() else requireActivity()
+    })
     private lateinit var authManager: AuthenticationManager
     private lateinit var binding: ViewDataBinding
     private lateinit var map: GoogleMap
@@ -65,6 +70,8 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val id = arguments?.getString("architect_id")
 
         // Initialize Places.
         if (!Places.isInitialized()) {
@@ -110,6 +117,7 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
                 Toast.makeText(requireContext(), "Pilih salah satu layanan", Toast.LENGTH_SHORT).show()
             } else {
                 saveAnswerAndMoveToNext(answer)
+                Log.d("Questionnaire", "After Q1: currentQuestion=${viewModel.currentQuestion}, answers=${viewModel.answers}")
             }
         }
     }
@@ -300,42 +308,59 @@ class QuestionnaireDialogFragment : DialogFragment(), OnMapReadyCallback {
 
     private fun dismissAndReopen() {
         dismiss()
-        parentFragment?.let {
-            if (it is HomeFragment) {
-                it.openQuestionnaire(viewModel.currentQuestion)
-            }
+        if (parentFragment != null) { // Jika dipanggil dari Fragment
+            (parentFragment as? HomeFragment)?.openQuestionnaire(viewModel.currentQuestion)
+        } else { // Jika dipanggil dari Activity
+            (activity as? ArchitectActivity)?.openQuestionnaire(viewModel.currentQuestion)
         }
     }
 
     private fun submitAnswers() {
-        // Pastikan bahwa `viewModel.answers` memiliki semua jawaban
-        val projectRequest = ProjectRequest(
-            projectName = "Rumah kedua",
-            name = viewModel.answers[0], // Jasa
-            lat = viewModel.selectedLocation?.latitude ?: 0.0,
-            long = viewModel.selectedLocation?.longitude ?: 0.0,
-            type = viewModel.answers[2], // Kebutuhan
-            buildingType = viewModel.answers[3], // Tipe Bangunan
-            area = viewModel.answers[4].substringAfter("Luas Bangunan: ").toIntOrNull() ?: 0,
-            numFloor = viewModel.answers[5].substringAfter("Jumlah Lantai: ").toIntOrNull() ?: 0,
-            numPerson = viewModel.answers[6].substringAfter("Jumlah Penghuni: ").toIntOrNull() ?: 0,
-            numRoom = viewModel.answers[7].substringAfter("Jumlah Kamar: ").toIntOrNull() ?: 0,
-            numBathroom = viewModel.answers[8].substringAfter("Jumlah Kamar Mandi: ").toIntOrNull() ?: 0,
-            theme = viewModel.answers[9], // Tema
-            budget = "251 juta - 500 juta",
-            buildingTime = "2024-07-17",
-            notes = "buat rumah yang cepettttt"
-        )
-        val userId = "a67a265a-6f6f-49c0-95c1-f3f19e045a8b"
+        try {
+            val answers = viewModel.answers
 
-        val getToken = authManager.getAccess(AuthenticationManager.TOKEN).toString()
-        val token = "Bearer $getToken"
-
-        homeViewModel.submitProject(token, userId, projectRequest)
-        homeViewModel.projectResponse.observe(viewLifecycleOwner) {
-            if (it != null) {
-                dismiss()
+            // Pastikan list `answers` memiliki semua jawaban yang diperlukan
+            if (answers.size < 7) { // Check if there are 8 answers
+                Log.e("QuestionnaireDialogFragment", "Insufficient number of answers. 8 answers are required, but only ${answers.size} were provided.")
+                Toast.makeText(context, "Make sure all questions have been answered.", Toast.LENGTH_SHORT).show()
+                return
             }
+
+            // Membuat ProjectRequest sesuai dengan format yang diperlukan oleh API
+            val projectRequest = ProjectRequest(
+                projectName = "Rumah pertama",
+                name = answers[0], // Jenis Layanan
+                lat = viewModel.selectedLocation?.latitude ?: 0.0,
+                long = viewModel.selectedLocation?.longitude ?: 0.0,
+                type = answers[2], // Jenis Proyek
+                buildingType = answers[3], // Tipe Bangunan
+                area = answers[4].substringBefore(",").toIntOrNull() ?: 0, // Luas Bangunan
+                numPerson = answers[5].substringBefore(",").toIntOrNull() ?: 0, // Jumlah Penghuni
+                numRoom = answers[6].substringAfter("Jumlah Kamar: ").toIntOrNull() ?: 0,
+                numBathroom = answers[6].substringAfter("Jumlah Kamar Mandi: ").toIntOrNull() ?: 0,
+                numFloor = answers[4].substringAfter("Jumlah Lantai: ").toIntOrNull() ?: 0,
+                theme = answers[6].substringBefore(",").substringAfter("Tema: "), // Tema (ambil dari awal hingga koma)
+                budget = "251 juta - 500 juta",
+                buildingTime = "2024-07-17",
+                notes = "buat rumah yang cepettttt"
+            )
+
+
+
+            // Mendapatkan token untuk autentikasi
+            val getToken = authManager.getAccess(AuthenticationManager.TOKEN).toString()
+            val token = "Bearer $getToken"
+
+            // Mengirim permintaan untuk membuat proyek baru
+            homeViewModel.submitProject(token, "architect_id", projectRequest)
+            homeViewModel.projectResponse.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    dismiss() // Menutup dialog setelah pengiriman berhasil
+                }
+            }
+
+        } catch (e: IndexOutOfBoundsException) {
+            Log.e("QuestionnaireDialogFragment", "Terjadi kesalahan: ${e.message}")
         }
     }
 

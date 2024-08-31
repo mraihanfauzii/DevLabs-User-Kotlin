@@ -46,7 +46,6 @@ class SplashScreenActivity : AppCompatActivity() {
                 profileViewModel.getProfileResponse.observe(this@SplashScreenActivity) { getProfile ->
                     if (getProfile != null) {
                         authenticationManager.apply {
-                            Log.e("Get Profile : ", getProfile.toString())
                             login(AuthenticationManager.NAME, getProfile.profileName ?: "")
                             login(AuthenticationManager.PHONE_NUMBER, getProfile.phoneNumber ?: "")
                             login(AuthenticationManager.ID, getProfile.id ?: "")
@@ -60,7 +59,6 @@ class SplashScreenActivity : AppCompatActivity() {
                         finishAffinity()
                     }
                 }
-                Log.e("token", "token : " + authenticationManager.getAccess(AuthenticationManager.TOKEN).toString())
                 startActivity(loginSuccess)
                 finishAffinity()
             } else {

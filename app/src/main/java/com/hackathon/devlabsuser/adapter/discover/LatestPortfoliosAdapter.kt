@@ -51,6 +51,10 @@ class LatestPortfoliosAdapter: RecyclerView.Adapter<LatestPortfoliosAdapter.Late
         notifyDataSetChanged()
     }
 
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     interface OnItemClickCallback {
         fun onItemClicked(portfolio: Portfolio)
     }

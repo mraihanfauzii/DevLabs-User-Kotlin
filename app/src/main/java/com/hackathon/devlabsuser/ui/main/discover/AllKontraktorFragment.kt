@@ -14,13 +14,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.AllArchitectAdapter
 import com.hackathon.devlabsuser.databinding.FragmentAllArchitectBinding
+import com.hackathon.devlabsuser.databinding.FragmentKontraktorBinding
 import com.hackathon.devlabsuser.model.UserData
 import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
 
-class AllArchitectFragment : Fragment() {
-    private var _binding : FragmentAllArchitectBinding? = null
+class AllKontraktorFragment : Fragment() {
+    private var _binding : FragmentKontraktorBinding? = null
     private val binding get() = _binding!!
     private lateinit var architectAdapter: AllArchitectAdapter
     private lateinit var discoverViewModel: DiscoverViewModel
@@ -32,7 +33,7 @@ class AllArchitectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAllArchitectBinding.inflate(inflater, container, false)
+        _binding = FragmentKontraktorBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -69,8 +70,8 @@ class AllArchitectFragment : Fragment() {
             }
         })
 
-        discoverViewModel.getAllArchitect(token)
-        discoverViewModel.getAllArchitect.observe(viewLifecycleOwner) {
+        discoverViewModel.getAllKontraktor(token)
+        discoverViewModel.getAllKontraktor.observe(viewLifecycleOwner) {
             if (it != null) {
                 architectAdapter.getArchitects(it)
             }

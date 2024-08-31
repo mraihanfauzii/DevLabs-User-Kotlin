@@ -11,12 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.architect.PortfolioAdapter
-import com.hackathon.devlabsuser.adapter.home.article.ArticleHomeAdapter
 import com.hackathon.devlabsuser.databinding.FragmentArchitectPortfolioBinding
-import com.hackathon.devlabsuser.model.Article
 import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
-import com.hackathon.devlabsuser.ui.main.home.DetailArticleActivity
 import com.hackathon.devlabsuser.viewmodel.ArchitectViewModel
 
 class ArchitectPortfolioFragment : Fragment() {
@@ -40,17 +37,17 @@ class ArchitectPortfolioFragment : Fragment() {
         authenticationManager = AuthenticationManager(requireContext())
 
         portfolioAdapter = PortfolioAdapter(emptyList())
-//        portfolioAdapter.setOnItemClickCallback(object: PortfolioAdapter.OnItemClickCallback {
-//            override fun onItemClicked(portfolio: Portfolio) {
-//                Intent(context, DetailArticleActivity::class.java).also {
-//                    it.putExtra(DetailArticleActivity.PHOTO_URL, article.photoUrl)
-//                    it.putExtra(DetailArticleActivity.TITLE, article.title)
-//                    it.putExtra(DetailArticleActivity.DESCRIPTION, article.description)
-//                    it.putExtra(DetailArticleActivity.ID, article.id.toString())
-//                    startActivity(it)
-//                }
-//            }
-//        })
+        portfolioAdapter.setOnItemClickCallback(object: PortfolioAdapter.OnItemClickCallback {
+            override fun onItemClicked(portfolio: Portfolio) {
+                Intent(context, DetailPortfolioActivity::class.java).also {
+                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ATTACHMENTS, "https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz" + portfolio.attachments?.firstOrNull()?.path)
+                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_NAME, portfolio.name)
+                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_DESCRIPTION, portfolio.description)
+                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ID, portfolio.id)
+                    startActivity(it)
+                }
+            }
+        })
 
         binding.rvPortfolios.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPortfolios.adapter = portfolioAdapter

@@ -22,6 +22,7 @@ class FavoriteArticleFragment : Fragment() {
     private lateinit var favoriteArticleAdapter: FavoriteArticleAdapter
     private val favoriteViewModel: FavoriteViewModel by viewModels()
     private var articleList: List<Article> = emptyList()
+    private var isAscending = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +41,25 @@ class FavoriteArticleFragment : Fragment() {
             articleList = articles
             favoriteArticleAdapter.getArticles(articles)
         }
-        binding.rvArticle.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = favoriteArticleAdapter
+
+        binding.apply {
+            rvArticle.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter = favoriteArticleAdapter
+            }
+            btnSort.setOnClickListener {
+                isAscending = !isAscending
+                sortArticles(isAscending)
+            }
+            searchInput.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    filter(s.toString())
+                }
+                override fun afterTextChanged(s: Editable?) {}
+            })
         }
+
         favoriteArticleAdapter.setOnItemClickCallback(object: FavoriteArticleAdapter.OnItemClickCallback {
             override fun onItemClicked(article: Article) {
                 Intent(context, DetailArticleActivity::class.java).also {
@@ -55,14 +71,15 @@ class FavoriteArticleFragment : Fragment() {
                 }
             }
         })
+    }
 
-        binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filter(s.toString())
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+    private fun sortArticles(isAscending: Boolean) {
+        val sortedList = if (isAscending) {
+            articleList.sortedBy { it.title }
+        } else {
+            articleList.sortedByDescending { it.title }
+        }
+        favoriteArticleAdapter.getArticles(sortedList)
     }
 
     private fun filter(text: String) {

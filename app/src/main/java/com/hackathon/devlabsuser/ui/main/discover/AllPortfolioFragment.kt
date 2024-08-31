@@ -1,5 +1,6 @@
 package com.hackathon.devlabsuser.ui.main.discover
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.LatestPortfoliosAdapter
 import com.hackathon.devlabsuser.databinding.FragmentAllPortfolioBinding
 import com.hackathon.devlabsuser.model.Portfolio
+import com.hackathon.devlabsuser.ui.architect.DetailPortfolioActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
 import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
 
@@ -40,6 +42,29 @@ class AllPortfolioFragment : Fragment() {
 
         latestPortfoliosAdapter = LatestPortfoliosAdapter()
         latestPortfoliosAdapter.notifyDataSetChanged()
+        latestPortfoliosAdapter.setOnItemClickCallback(object: LatestPortfoliosAdapter.OnItemClickCallback {
+            override fun onItemClicked(portfolio: Portfolio) {
+                val attachmentsList = portfolio.attachments
+                    ?.filter { it.portfolioId != null } // Filter attachments dengan portfolioId null
+                    ?.let { ArrayList(it) } ?: ArrayList()
+                Intent(context, DetailPortfolioActivity::class.java).apply {
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_CREATED_AT, portfolio.createdAt)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_NAME, portfolio.name)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_DESCRIPTION, portfolio.description)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_NAME, portfolio.theme?.name ?: "")
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_ID, portfolio.theme?.id ?: "")
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_IMAGE, portfolio.theme?.image ?: "")
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ID, portfolio.id)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_ID, portfolio.architect.id)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_NAME, portfolio.architect.name)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_PICTURE, portfolio.architect.picture)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_CLICK_COUNT, portfolio.clickCount)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ESTIMATED_BUDGET, portfolio.estimatedBudget)
+                    putParcelableArrayListExtra(DetailPortfolioActivity.PORTFOLIO_ATTACHMENTS, attachmentsList)
+                    startActivity(this)
+                }
+            }
+        })
 
         authManager = AuthenticationManager(requireContext())
         val getToken = authManager.getAccess(AuthenticationManager.TOKEN).toString()

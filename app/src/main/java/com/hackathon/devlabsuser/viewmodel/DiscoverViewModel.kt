@@ -23,6 +23,9 @@ class DiscoverViewModel : ViewModel() {
     private val _getAllArchitect = MutableLiveData<List<UserData>>()
     val getAllArchitect : LiveData<List<UserData>> = _getAllArchitect
 
+    private val _getAllKontraktor = MutableLiveData<List<UserData>>()
+    val getAllKontraktor : LiveData<List<UserData>> = _getAllKontraktor
+
     private val _getAllThemes = MutableLiveData<List<Theme>>()
     val getAllThemes : LiveData<List<Theme>> = _getAllThemes
 
@@ -48,6 +51,34 @@ class DiscoverViewModel : ViewModel() {
                 } else {
                     Log.e("PromoViewModel", "onFailure: ${response.message()}")
                     _getAllArchitect.value = response.body()?.data
+                    _errorMessage.value = "Failed to get promo"
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse<List<UserData>>>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("PromoViewModel", "onFailure: ${t.message.toString()}")
+                _errorMessage.value = "Failed to get promo"
+            }
+        })
+    }
+
+    fun getAllKontraktor(token: String){
+        _isLoading.value = true
+        ApiConfig.getApiService().getAllUsers(token).enqueue(object :
+            Callback<ApiResponse<List<UserData>>> {
+            override fun onResponse(
+                call: Call<ApiResponse<List<UserData>>>,
+                response: Response<ApiResponse<List<UserData>>>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val allUsers = response.body()?.data ?: emptyList()
+                    val architects = allUsers.filter { it.role == "contractor" }
+                    _getAllKontraktor.value = response.body()?.data?.filter { it.role == "contractor" }
+                } else {
+                    Log.e("PromoViewModel", "onFailure: ${response.message()}")
+                    _getAllKontraktor.value = response.body()?.data
                     _errorMessage.value = "Failed to get promo"
                 }
             }

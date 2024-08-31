@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.hackathon.devlabsuser.ui.main.construction.DibatalkanFragment
+import com.hackathon.devlabsuser.ui.main.construction.MenungguKonfirmasiFragment
 import com.hackathon.devlabsuser.ui.main.construction.SedangDikerjakanFragment
 import com.hackathon.devlabsuser.ui.main.construction.SelesaiFragment
 
@@ -22,9 +22,9 @@ class ConstructionFragmentAdapter(fm: FragmentManager, lifecycle: Lifecycle, dat
     override fun createFragment(position: Int): Fragment {
         var fragment = Fragment()
         when (position) {
-            0 -> fragment = SedangDikerjakanFragment()
-            1 -> fragment = SelesaiFragment()
-            2 -> fragment = DibatalkanFragment()
+            0 -> fragment = MenungguKonfirmasiFragment()
+            1 -> fragment = SedangDikerjakanFragment()
+            2 -> fragment = SelesaiFragment()
         }
         fragment.arguments = this.fragmentBundle
         return fragment

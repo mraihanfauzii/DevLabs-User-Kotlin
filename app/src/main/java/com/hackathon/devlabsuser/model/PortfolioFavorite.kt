@@ -1,14 +1,15 @@
 package com.hackathon.devlabsuser.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
-@Entity(tableName = "portfolio_favorite")
-data class PortfolioFavorite(
-    @PrimaryKey
-    val id: Int,
-    val name: String,
-    val theme: String,
-    val photoUrl: String
-) : Serializable
+//data class PortfolioFavorite(
+//    @PrimaryKey
+//    val id: String,
+//    val name: String,
+//    val theme: String,
+//    val photoUrl: String
+//) : Serializable

@@ -2,13 +2,13 @@ package com.hackathon.devlabsuser.room
 
 import androidx.lifecycle.LiveData
 import com.hackathon.devlabsuser.model.Article
-import com.hackathon.devlabsuser.model.PortfolioFavorite
+import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.model.UserData
 
 class FavoriteRepository(private val database: FavoriteDatabase) {
     val allArticleFavorites: LiveData<List<Article>> = database.articleFavoriteDao().getAllArticles()
     val allArchitectFavorites: LiveData<List<UserData>> = database.architectFavoriteDao().getAllArchitects()
-    val allPortfolioFavorites: LiveData<List<PortfolioFavorite>> = database.portfolioFavoriteDao().getAllPortfolios()
+    val allPortfolioFavorites: LiveData<List<Portfolio>> = database.portfolioFavoriteDao().getAllPortfolios()
 
     suspend fun insertArticleFavorite(article: Article) {
         database.articleFavoriteDao().insert(article)
@@ -26,11 +26,11 @@ class FavoriteRepository(private val database: FavoriteDatabase) {
         database.architectFavoriteDao().delete(architectFavorite)
     }
 
-    suspend fun insertPortfolioFavorite(portfolioFavorite: PortfolioFavorite) {
+    suspend fun insertPortfolioFavorite(portfolioFavorite: Portfolio) {
         database.portfolioFavoriteDao().insert(portfolioFavorite)
     }
 
-    suspend fun deletePortfolioFavorite(portfolioFavorite: PortfolioFavorite) {
+    suspend fun deletePortfolioFavorite(portfolioFavorite: Portfolio) {
         database.portfolioFavoriteDao().delete(portfolioFavorite)
     }
 }

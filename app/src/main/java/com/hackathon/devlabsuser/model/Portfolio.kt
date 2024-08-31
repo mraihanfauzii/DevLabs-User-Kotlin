@@ -1,11 +1,15 @@
 package com.hackathon.devlabsuser.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+@Entity(tableName = "portfolio_favorite")
 @Parcelize
 data class Portfolio(
+    @PrimaryKey
     val id: String,
     val architect: Architect,
     val theme: PortfolioTheme?,
@@ -24,7 +28,7 @@ data class Portfolio(
 data class Attachments(
     val id: String,
     @field:SerializedName("portfolio_id")
-    val portfolioId: String,
+    val portfolioId: String?,
     val name: String,
     val path: String,
     @field:SerializedName("created_at")

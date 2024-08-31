@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.hackathon.devlabsuser.model.Article
-import com.hackathon.devlabsuser.model.PortfolioFavorite
+import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.model.UserData
+import com.hackathon.devlabsuser.utils.Converters
 
 @Database(
-    entities = [Article::class, UserData::class, PortfolioFavorite::class],
+    entities = [Article::class, UserData::class, Portfolio::class],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class FavoriteDatabase : RoomDatabase() {
     abstract fun articleFavoriteDao(): ArticleFavoriteDAO
     abstract fun architectFavoriteDao(): ArchitectFavoriteDAO

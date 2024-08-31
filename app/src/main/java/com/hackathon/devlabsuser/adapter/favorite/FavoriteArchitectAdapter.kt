@@ -5,23 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
-import com.hackathon.devlabsuser.model.Article
+import com.hackathon.devlabsuser.model.UserData
 
-class FavoriteArchitectAdapter: RecyclerView.Adapter<FavoriteArchitectAdapter.ArticleListViewHolder>() {
+class FavoriteArchitectAdapter: RecyclerView.Adapter<FavoriteArchitectAdapter.ArchitectListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private var articleList = emptyList<Article>()
-    inner class ArticleListViewHolder(private val binding: ItemArticleHorizontalBinding): RecyclerView.ViewHolder(binding.root) {
-        fun getArticle(article: Article) {
+    private var architectList = emptyList<UserData>()
+    inner class ArchitectListViewHolder(private val binding: ItemArticleHorizontalBinding): RecyclerView.ViewHolder(binding.root) {
+        fun getArchitect(architect: UserData) {
             binding.apply {
                 Glide.with(itemView)
-                    .load(article.photoUrl)
+                    .load("https://www.bumpy-insects-reply-yearly.a276.dcdg.xyz" + architect.profilePicture)
                     .centerCrop()
                     .into(imgArticleThumbnail)
-                tvArticleTitle.text = article.title
-                tvStoriesDescription.text = article.description
+                tvArticleTitle.text = architect.profileName
+                tvStoriesDescription.text = architect.profileDescription
 
                 root.setOnClickListener {
-                    onItemClickCallback.onItemClicked(article)
+                    onItemClickCallback.onItemClicked(architect)
                 }
             }
         }
@@ -30,19 +30,19 @@ class FavoriteArchitectAdapter: RecyclerView.Adapter<FavoriteArchitectAdapter.Ar
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FavoriteArchitectAdapter.ArticleListViewHolder {
+    ): FavoriteArchitectAdapter.ArchitectListViewHolder {
         val data = ItemArticleHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ArticleListViewHolder(data)
+        return ArchitectListViewHolder(data)
     }
 
-    override fun onBindViewHolder(holder: FavoriteArchitectAdapter.ArticleListViewHolder, position: Int) {
-        holder.getArticle(articleList[position])
+    override fun onBindViewHolder(holder: FavoriteArchitectAdapter.ArchitectListViewHolder, position: Int) {
+        holder.getArchitect(architectList[position])
     }
 
-    override  fun getItemCount(): Int = articleList.size
+    override  fun getItemCount(): Int = architectList.size
 
-    fun getArticles(listArticle: List<Article>) {
-        articleList = listArticle
+    fun getArchitects(listArchitect: List<UserData>) {
+        architectList = listArchitect
         notifyDataSetChanged()
     }
 
@@ -51,6 +51,6 @@ class FavoriteArchitectAdapter: RecyclerView.Adapter<FavoriteArchitectAdapter.Ar
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(article: Article)
+        fun onItemClicked(architect: UserData)
     }
 }

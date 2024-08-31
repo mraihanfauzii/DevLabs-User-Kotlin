@@ -14,16 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.progress.ProgressAdapter
 import com.hackathon.devlabsuser.databinding.FragmentMenungguKonfirmasiBinding
-import com.hackathon.devlabsuser.databinding.FragmentSedangDikerjakanBinding
-import com.hackathon.devlabsuser.model.Portfolio
 import com.hackathon.devlabsuser.model.Project
-import com.hackathon.devlabsuser.ui.architect.DetailPortfolioActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
-import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
+import com.hackathon.devlabsuser.ui.main.home.DetailArticleActivity
 import com.hackathon.devlabsuser.viewmodel.ProgressViewModel
 
-class SedangDikerjakanFragment : Fragment() {
-    private var _binding : FragmentSedangDikerjakanBinding? = null
+class MenungguKonfirmasiFragment : Fragment() {
+    private var _binding : FragmentMenungguKonfirmasiBinding? = null
     private val binding get() = _binding!!
     private lateinit var authManager: AuthenticationManager
     private lateinit var progressAdapter: ProgressAdapter
@@ -34,7 +31,7 @@ class SedangDikerjakanFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSedangDikerjakanBinding.inflate(inflater, container, false)
+        _binding = FragmentMenungguKonfirmasiBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -46,7 +43,31 @@ class SedangDikerjakanFragment : Fragment() {
         progressAdapter.notifyDataSetChanged()
         progressAdapter.setOnItemClickCallback(object: ProgressAdapter.OnItemClickCallback {
             override fun onItemClicked(project: Project) {
-
+                Intent(context, DetailProjectActivity::class.java).also {
+                    it.putExtra(DetailProjectActivity.CITY, project.city)
+                    it.putExtra(DetailProjectActivity.CREATED_AT, project.created_at)
+                    it.putExtra(DetailProjectActivity.NOTES, project.notes)
+                    it.putExtra(DetailProjectActivity.BUILDING_TIME, project.buildingtime)
+                    it.putExtra(DetailProjectActivity.BUDGET, project.budget)
+                    it.putExtra(DetailProjectActivity.THEME, project.theme)
+                    it.putExtra(DetailProjectActivity.NUM_FLOOR, project.numfloor)
+                    it.putExtra(DetailProjectActivity.NUM_BATHROOM, project.numbathroom)
+                    it.putExtra(DetailProjectActivity.NUM_ROOM, project.numroom)
+                    it.putExtra(DetailProjectActivity.NUM_PERSON, project.numperson)
+                    it.putExtra(DetailProjectActivity.AREA, project.area)
+                    it.putExtra(DetailProjectActivity.BUILDING_TYPE, project.buildingtype)
+                    it.putExtra(DetailProjectActivity.TYPE, project.type)
+                    it.putExtra(DetailProjectActivity.LONG, project.long)
+                    it.putExtra(DetailProjectActivity.LAT, project.lat)
+                    it.putExtra(DetailProjectActivity.AMOUNT, project.amount)
+                    it.putExtra(DetailProjectActivity.TAX, project.tax)
+                    it.putExtra(DetailProjectActivity.PRICE, project.price)
+                    it.putExtra(DetailProjectActivity.STATUS_TRANSACTION, project.status_transaction)
+                    it.putExtra(DetailProjectActivity.TRANSACTION_ID, project.transaction_id)
+                    it.putExtra(DetailProjectActivity.STATUS, project.status)
+                    it.putExtra(DetailProjectActivity.NAME, project.name)
+                    startActivity(it)
+                }
             }
         })
 
@@ -65,7 +86,7 @@ class SedangDikerjakanFragment : Fragment() {
         })
 
         progressViewModel.getProjectsByUserIdConfirm(token)
-        progressViewModel.projectsProgress.observe(viewLifecycleOwner) {
+        progressViewModel.projectsConfirm.observe(viewLifecycleOwner) {
             if (it != null) {
                 progressAdapter.getLatestPortfolios(it)
             }

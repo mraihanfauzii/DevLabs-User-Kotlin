@@ -31,9 +31,9 @@ class ConstructionFragment : Fragment() {
             ViewPager.adapter = viewPagerAdapter
             TabLayoutMediator(TabLayout, ViewPager) { tab, position ->
                 when (position) {
-                    0 -> tab.text = "Sedang Dikerjakan"
-                    1 -> tab.text = "Selesai"
-                    2 -> tab.text = "Dibatalkan"
+                    0 -> tab.text = "Menunggu Konfirmasi"
+                    1 -> tab.text = "Sedang Dikerjakan"
+                    2 -> tab.text = "Selesai"
                 }
             }.attach()
         }

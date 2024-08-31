@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.hackathon.devlabsuser.ui.main.discover.AllPortfolioFragment
 import com.hackathon.devlabsuser.ui.main.discover.TrendingFragment
 import com.hackathon.devlabsuser.ui.main.discover.AllArchitectFragment
+import com.hackathon.devlabsuser.ui.main.discover.AllKontraktorFragment
 
 class DiscoverFragmentAdapter(fm: FragmentManager, lifecycle: Lifecycle, data: Bundle) :
     FragmentStateAdapter(fm, lifecycle) {
@@ -17,7 +18,7 @@ class DiscoverFragmentAdapter(fm: FragmentManager, lifecycle: Lifecycle, data: B
         fragmentBundle = data
     }
 
-    override fun getItemCount(): Int = 3
+    override fun getItemCount(): Int = 4
 
     override fun createFragment(position: Int): Fragment {
         var fragment = Fragment()
@@ -25,6 +26,7 @@ class DiscoverFragmentAdapter(fm: FragmentManager, lifecycle: Lifecycle, data: B
             0 -> fragment = TrendingFragment()
             1 -> fragment = AllPortfolioFragment()
             2 -> fragment = AllArchitectFragment()
+            3 -> fragment = AllKontraktorFragment()
         }
         fragment.arguments = this.fragmentBundle
         return fragment

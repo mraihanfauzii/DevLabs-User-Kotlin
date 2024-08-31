@@ -51,13 +51,13 @@ class TrendingFragment : Fragment() {
         architectAdapter = AllArchitectAdapter(object: AllArchitectAdapter.OnItemClickCallback {
             override fun onItemClicked(architect: UserData) {
                 val intent = Intent(context, ArchitectActivity::class.java)
-                intent.putExtra("id", architect.id)
-                intent.putExtra("profile_picture", architect.profilePicture)
-                intent.putExtra("profile_name", architect.profileName)
-                intent.putExtra("email", architect.email)
-                intent.putExtra("phone_number", architect.phoneNumber)
-                intent.putExtra("profile_description", architect.profileDescription)
-                intent.putExtra("role", architect.role)
+                intent.putExtra(ArchitectActivity.ID, architect.id)
+                intent.putExtra(ArchitectActivity.PHOTO_URL, architect.profilePicture)
+                intent.putExtra(ArchitectActivity.NAME, architect.profileName)
+                intent.putExtra(ArchitectActivity.EMAIL, architect.email)
+                intent.putExtra(ArchitectActivity.PHONE_NUMBER, architect.phoneNumber)
+                intent.putExtra(ArchitectActivity.DESCRIPTION, architect.profileDescription)
+                intent.putExtra(ArchitectActivity.ROLE, architect.role)
                 startActivity(intent)
             }
         })
@@ -66,17 +66,22 @@ class TrendingFragment : Fragment() {
         trendingPortfoliosAdapter.notifyDataSetChanged()
         trendingPortfoliosAdapter.setOnItemClickCallback(object: TrendingPortfoliosAdapter.OnItemClickCallback {
             override fun onItemClicked(portfolio: Portfolio) {
-                Intent(context, DetailPortfolioActivity::class.java).also {
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_CREATED_AT, portfolio.createdAt)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_NAME, portfolio.name)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_DESCRIPTION, portfolio.description)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_THEME, portfolio.theme?.name)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ID, portfolio.id)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT, portfolio.architect)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_CLICK_COUNT, portfolio.clickCount)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ESTIMATED_BUDGET, portfolio.estimatedBudget)
-                    it.putExtra(DetailPortfolioActivity.PORTFOLIO_ESTIMATED_BUDGET, portfolio.attachments?.firstOrNull())
-                    startActivity(it)
+                val attachmentsList = portfolio.attachments ?: emptyList()
+                Intent(context, DetailPortfolioActivity::class.java).apply {
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_CREATED_AT, portfolio.createdAt)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_NAME, portfolio.name)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_DESCRIPTION, portfolio.description)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_NAME, portfolio.theme?.name)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_ID, portfolio.theme?.id)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_THEME_IMAGE, portfolio.theme?.image)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ID, portfolio.id)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_ID, portfolio.architect.id)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_NAME, portfolio.architect.name)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ARCHITECT_PICTURE, portfolio.architect.picture)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_CLICK_COUNT, portfolio.clickCount)
+                    putExtra(DetailPortfolioActivity.PORTFOLIO_ESTIMATED_BUDGET, portfolio.estimatedBudget)
+                    putParcelableArrayListExtra(DetailPortfolioActivity.PORTFOLIO_ATTACHMENTS, ArrayList(attachmentsList))
+                    startActivity(this)
                 }
             }
         })
