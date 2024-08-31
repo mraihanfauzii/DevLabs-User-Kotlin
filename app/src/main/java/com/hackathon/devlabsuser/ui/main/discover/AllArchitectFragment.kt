@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.AllArchitectAdapter
 import com.hackathon.devlabsuser.databinding.FragmentAllArchitectBinding
+import com.hackathon.devlabsuser.model.RecArchitect
 import com.hackathon.devlabsuser.model.UserData
 import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager

@@ -13,15 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hackathon.devlabsuser.adapter.discover.AllArchitectAdapter
 import com.hackathon.devlabsuser.adapter.discover.themes.ThemesAdapter
 import com.hackathon.devlabsuser.adapter.discover.TrendingPortfoliosAdapter
-import com.hackathon.devlabsuser.adapter.home.PromoAdapter
 import com.hackathon.devlabsuser.databinding.FragmentTrendingBinding
 import com.hackathon.devlabsuser.model.Portfolio
-import com.hackathon.devlabsuser.model.Promo
+import com.hackathon.devlabsuser.model.RecArchitect
 import com.hackathon.devlabsuser.model.UserData
 import com.hackathon.devlabsuser.ui.architect.ArchitectActivity
 import com.hackathon.devlabsuser.ui.architect.DetailPortfolioActivity
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
-import com.hackathon.devlabsuser.ui.main.home.DetailPromoActivity
 import com.hackathon.devlabsuser.viewmodel.DiscoverViewModel
 
 class TrendingFragment : Fragment() {

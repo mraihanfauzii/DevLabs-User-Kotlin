@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
-import com.hackathon.devlabsuser.databinding.ItemArchitectBinding
 import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
+import com.hackathon.devlabsuser.model.RecArchitect
 import com.hackathon.devlabsuser.model.UserData
 
 class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback): RecyclerView.Adapter<AllArchitectAdapter.ArchitectListViewHolder>() {
@@ -30,12 +30,8 @@ class AllArchitectAdapter(private val onItemClickCallback: OnItemClickCallback):
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): AllArchitectAdapter.ArchitectListViewHolder {
-        val data =
-            ItemArticleHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllArchitectAdapter.ArchitectListViewHolder {
+        val data = ItemArticleHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArchitectListViewHolder(data)
     }
 

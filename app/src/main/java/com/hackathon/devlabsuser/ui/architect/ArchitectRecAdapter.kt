@@ -1,21 +1,46 @@
 package com.hackathon.devlabsuser.ui.architect
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hackathon.devlabsuser.R
+import com.hackathon.devlabsuser.databinding.ItemRecArchitectBinding
 import com.hackathon.devlabsuser.model.RecArchitect
 
-class ArchitectAdapter(private val architects: List<RecArchitect>) :
-    RecyclerView.Adapter<ArchitectAdapter.ArchitectViewHolder>() {
+class ArchitectRecAdapter(
+    private val architects: List<RecArchitect>,
+    private val onItemClickCallback: OnItemClickCallbackRecArchitect
+) : RecyclerView.Adapter<ArchitectRecAdapter.ArchitectViewHolder>() {
+
+    inner class ArchitectViewHolder(private val binding: ItemRecArchitectBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(architect: RecArchitect) {
+            binding.apply {
+                tvName.text = architect.profileName
+                tvDescription.text = architect.profileDescription
+                tvRate.text = "Permeter : ${architect.rate} IDR"
+
+                // Load profile picture using Glide
+                Glide.with(itemView)
+                    .load(architect.profilePicture)
+                    .placeholder(R.drawable.contoh_profile) // Placeholder image
+                    .into(imgProfile)
+
+                root.setOnClickListener {
+                    onItemClickCallback.onItemClicked(architect)
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchitectViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rec_architect, parent, false)
-        return ArchitectViewHolder(view)
+        val data = ItemRecArchitectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ArchitectViewHolder(data)
+    }
+
+    override fun getItemCount(): Int {
+        return architects.size
     }
 
     override fun onBindViewHolder(holder: ArchitectViewHolder, position: Int) {
@@ -23,26 +48,7 @@ class ArchitectAdapter(private val architects: List<RecArchitect>) :
         holder.bind(architect)
     }
 
-    override fun getItemCount(): Int {
-        return architects.size
-    }
-
-    class ArchitectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imgProfile: ImageView = itemView.findViewById(R.id.img_profile)
-        private val tvName: TextView = itemView.findViewById(R.id.tv_name)
-        private val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
-        private val tvRate: TextView = itemView.findViewById(R.id.tv_rate)
-
-        fun bind(architect: RecArchitect) {
-            tvName.text = architect.profileName
-            tvDescription.text = architect.profileDescription
-            tvRate.text = "${architect.rate} IDR"
-
-            // Load gambar profil menggunakan Glide
-            Glide.with(itemView.context)
-                .load(architect.profilePicture)
-                .placeholder(R.drawable.article_background) // Gambar placeholder
-                .into(imgProfile)
-        }
+    interface OnItemClickCallbackRecArchitect {
+        fun onItemClicked(architect: RecArchitect)
     }
 }
