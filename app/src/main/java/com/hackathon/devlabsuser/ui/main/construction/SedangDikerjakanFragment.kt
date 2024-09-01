@@ -46,7 +46,10 @@ class SedangDikerjakanFragment : Fragment() {
         progressAdapter.notifyDataSetChanged()
         progressAdapter.setOnItemClickCallback(object: ProgressAdapter.OnItemClickCallback {
             override fun onItemClicked(project: Project) {
-
+                Intent(context, DetailProjectActivity::class.java).also {
+                    it.putExtra(DetailProjectActivity.ID, project.id)
+                    startActivity(it)
+                }
             }
         })
 
@@ -64,7 +67,7 @@ class SedangDikerjakanFragment : Fragment() {
             }
         })
 
-        progressViewModel.getProjectsByUserIdConfirm(token)
+        progressViewModel.getProjectsByUserIdProgress(token)
         progressViewModel.projectsProgress.observe(viewLifecycleOwner) {
             if (it != null) {
                 progressAdapter.getLatestPortfolios(it)

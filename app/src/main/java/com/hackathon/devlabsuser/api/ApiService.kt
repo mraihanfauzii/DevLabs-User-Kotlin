@@ -140,6 +140,12 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<ApiResponse<List<Project>>>
 
+    @GET("projects/{id}")
+    fun getProjectById(
+        @Header("Authorization") token: String,
+        @Path("id") projectId: String
+    ): Call<ApiResponse<List<Project>>>
+
     @POST("projects/recommended-architects")
     fun getRecommendedArchitects(
         @Header("Authorization") token: String,

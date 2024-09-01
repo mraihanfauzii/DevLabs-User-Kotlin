@@ -3,6 +3,8 @@ package com.hackathon.devlabsuser.adapter.progress
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ItemArticleHorizontalBinding
 import com.hackathon.devlabsuser.model.Project
 
@@ -16,6 +18,13 @@ class ProgressAdapter: RecyclerView.Adapter<ProgressAdapter.MenungguKonfirmasiVi
             binding.apply {
                 tvArticleTitle.text = project.name
                 tvStoriesDescription.text = project.status
+                tvStoriesDateUpload.text = project.buildingtype
+
+                Glide.with(itemView)
+                    .load(R.drawable.contoh_profile)
+                    .centerCrop()
+                    .placeholder(R.drawable.contoh_profile)
+                    .into(imgArticleThumbnail)
 
                 root.setOnClickListener {
                     onItemClickCallback.onItemClicked(project)

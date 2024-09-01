@@ -60,7 +60,7 @@ class SelesaiFragment : Fragment() {
             }
         })
 
-        progressViewModel.getProjectsByUserIdConfirm(token)
+        progressViewModel.getProjectsByUserIdDone(token)
         progressViewModel.projectsDone.observe(viewLifecycleOwner) {
             if (it != null) {
                 progressAdapter.getLatestPortfolios(it)

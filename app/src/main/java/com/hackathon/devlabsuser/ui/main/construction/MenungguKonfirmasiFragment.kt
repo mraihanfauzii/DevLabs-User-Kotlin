@@ -44,28 +44,7 @@ class MenungguKonfirmasiFragment : Fragment() {
         progressAdapter.setOnItemClickCallback(object: ProgressAdapter.OnItemClickCallback {
             override fun onItemClicked(project: Project) {
                 Intent(context, DetailProjectActivity::class.java).also {
-                    it.putExtra(DetailProjectActivity.CITY, project.city)
-                    it.putExtra(DetailProjectActivity.CREATED_AT, project.created_at)
-                    it.putExtra(DetailProjectActivity.NOTES, project.notes)
-                    it.putExtra(DetailProjectActivity.BUILDING_TIME, project.buildingtime)
-                    it.putExtra(DetailProjectActivity.BUDGET, project.budget)
-                    it.putExtra(DetailProjectActivity.THEME, project.theme)
-                    it.putExtra(DetailProjectActivity.NUM_FLOOR, project.numfloor)
-                    it.putExtra(DetailProjectActivity.NUM_BATHROOM, project.numbathroom)
-                    it.putExtra(DetailProjectActivity.NUM_ROOM, project.numroom)
-                    it.putExtra(DetailProjectActivity.NUM_PERSON, project.numperson)
-                    it.putExtra(DetailProjectActivity.AREA, project.area)
-                    it.putExtra(DetailProjectActivity.BUILDING_TYPE, project.buildingtype)
-                    it.putExtra(DetailProjectActivity.TYPE, project.type)
-                    it.putExtra(DetailProjectActivity.LONG, project.long)
-                    it.putExtra(DetailProjectActivity.LAT, project.lat)
-                    it.putExtra(DetailProjectActivity.AMOUNT, project.amount)
-                    it.putExtra(DetailProjectActivity.TAX, project.tax)
-                    it.putExtra(DetailProjectActivity.PRICE, project.price)
-                    it.putExtra(DetailProjectActivity.STATUS_TRANSACTION, project.status_transaction)
-                    it.putExtra(DetailProjectActivity.TRANSACTION_ID, project.transaction_id)
-                    it.putExtra(DetailProjectActivity.STATUS, project.status)
-                    it.putExtra(DetailProjectActivity.NAME, project.name)
+                    it.putExtra(DetailProjectActivity.ID, project.id)
                     startActivity(it)
                 }
             }

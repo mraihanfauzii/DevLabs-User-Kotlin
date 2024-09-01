@@ -13,6 +13,9 @@ import retrofit2.Response
 
 class ProgressViewModel : ViewModel() {
 
+    private val _projectDataById = MutableLiveData<List<Project>>()
+    val projectDataById: LiveData<List<Project>> = _projectDataById
+
     private val _projectsConfirm = MutableLiveData<List<Project>>()
     val projectsConfirm: LiveData<List<Project>> = _projectsConfirm
 
@@ -27,6 +30,34 @@ class ProgressViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
+
+    fun getProjectsDataById(token: String, projectId: String){
+        _isLoading.value = true
+        _errorMessage.value = null
+        ApiConfig.getApiService().getProjectById(token, projectId).enqueue(object :
+            Callback<ApiResponse<List<Project>>> {
+            override fun onResponse(
+                call: Call<ApiResponse<List<Project>>>,
+                response: Response<ApiResponse<List<Project>>>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _projectDataById.value = response.body()?.data
+                } else {
+                    _projectDataById.value = response.body()?.data
+                    // Handle non-successful response cases
+                    Log.e("ProgressViewModel", "onFailure: ${response.errorBody()?.string()}")
+                    _errorMessage.value = "Failed to get project data by id"
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse<List<Project>>>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("ProgressViewModel", "onFailure: ${t.message.toString()}")
+                _errorMessage.value = "testt"
+            }
+        })
+    }
 
     fun getProjectsByUserIdConfirm(token: String){
         _isLoading.value = true
@@ -43,7 +74,7 @@ class ProgressViewModel : ViewModel() {
                     val filteredProjects = allProjects?.filter { it.status == "Menunggu konfirmasi" }
                     _projectsConfirm.value = filteredProjects
                 } else {
-                    Log.e("ProfileViewModel", "onFailure: ${response.message()}")
+                    Log.e("ProgressViewModel", "onFailure: ${response.message()}")
                     _projectsConfirm.value = response.body()?.data
                     _errorMessage.value = "Failed to get profile"
                 }
@@ -51,7 +82,7 @@ class ProgressViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ApiResponse<List<Project>>>, t: Throwable) {
                 _isLoading.value = false
-                Log.e("ProfileViewModel", "onFailure: ${t.message.toString()}")
+                Log.e("ProgressViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to get profile"
             }
         })
@@ -72,7 +103,7 @@ class ProgressViewModel : ViewModel() {
                     val filteredProjects = allProjects?.filter { it.status != "Menunggu konfirmasi" && it.status != "Selesai" }
                     _projectsProgress.value = filteredProjects
                 } else {
-                    Log.e("ProfileViewModel", "onFailure: ${response.message()}")
+                    Log.e("ProgressViewModel", "onFailure: ${response.message()}")
                     _projectsProgress.value = response.body()?.data
                     _errorMessage.value = "Failed to get profile"
                 }
@@ -80,7 +111,7 @@ class ProgressViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ApiResponse<List<Project>>>, t: Throwable) {
                 _isLoading.value = false
-                Log.e("ProfileViewModel", "onFailure: ${t.message.toString()}")
+                Log.e("ProgressViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to get profile"
             }
         })
@@ -101,7 +132,7 @@ class ProgressViewModel : ViewModel() {
                     val filteredProjects = allProjects?.filter { it.status == "Selesai" }
                     _projectsDone.value = filteredProjects
                 } else {
-                    Log.e("ProfileViewModel", "onFailure: ${response.message()}")
+                    Log.e("ProgressViewModel", "onFailure: ${response.message()}")
                     _projectsDone.value = response.body()?.data
                     _errorMessage.value = "Failed to get profile"
                 }
@@ -109,7 +140,7 @@ class ProgressViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ApiResponse<List<Project>>>, t: Throwable) {
                 _isLoading.value = false
-                Log.e("ProfileViewModel", "onFailure: ${t.message.toString()}")
+                Log.e("ProgressViewModel", "onFailure: ${t.message.toString()}")
                 _errorMessage.value = "Failed to get profile"
             }
         })
