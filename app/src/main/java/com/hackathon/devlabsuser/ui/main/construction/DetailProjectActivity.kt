@@ -1,5 +1,6 @@
 package com.hackathon.devlabsuser.ui.main.construction
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.hackathon.devlabsuser.R
 import com.hackathon.devlabsuser.databinding.ActivityDetailProjectBinding
 import com.hackathon.devlabsuser.ui.authentication.AuthenticationManager
+import com.hackathon.devlabsuser.ui.authentication.LoginActivity
+import com.hackathon.devlabsuser.ui.main.home.DetailArticleActivity
 import com.hackathon.devlabsuser.viewmodel.ProgressViewModel
 
 class DetailProjectActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -53,9 +56,15 @@ class DetailProjectActivity : AppCompatActivity(), OnMapReadyCallback {
         progressViewModel.projectDataById.observe(this) { project ->
             // Update UI with the project details
             binding.apply {
-                tvProjectName.text = project.firstOrNull()!!.name ?: "Project Name Unavailable"
-                tvBudget.text = project.firstOrNull()!!.price ?: "N/A"
-                tvLocation.text = project.firstOrNull()!!.city ?: "N/A"
+                tvProjectName.text = project.firstOrNull()!!.name ?: "Rumah Fadhil"
+                tvBudget.text = project.firstOrNull()!!.price ?: "Rp.1000.000.000,00"
+                tvLocation.text = project.firstOrNull()!!.city ?: "Manjahlega, Kec. Rancasari, Kota Bandung, Jawa Barat 40286"
+                btnDetail.setOnClickListener {
+                    Intent(this@DetailProjectActivity, TimelineProgressActivity::class.java).also {
+                        it.putExtra(TimelineProgressActivity.ID, "article.id.toString()")
+                        startActivity(it)
+                    }
+                }
             }
 
             val lat = project.firstOrNull()!!.lat?.toDoubleOrNull()

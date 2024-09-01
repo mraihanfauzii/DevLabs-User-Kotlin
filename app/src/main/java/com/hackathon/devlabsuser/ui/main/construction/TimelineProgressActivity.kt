@@ -11,4 +11,8 @@ class TimelineProgressActivity : AppCompatActivity() {
         binding = ActivityTimelineProgressBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    companion object {
+        const val ID = "id"
+    }
 }

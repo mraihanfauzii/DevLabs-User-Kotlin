@@ -4,6 +4,307 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.main.construction.TimelineProgressActivity">
+
+    <!-- Title Bar -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Timeline Progress"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Timeline Progress -->
+    <LinearLayout
+        android:id="@+id/timelineProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/statusMenungguKonfirmasi"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_menunggu_konfirmasi"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Menunggu \nKonfirmasi"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/statusDesainPengerjaan"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_desain_pengerjaan"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Desain dan \nPengerjaan"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/statusPengecekanUlang"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_pengecekan_ulang"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pengecekan \nUlang"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/statusUlasan"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_ulasan"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Status Pekerjaan -->
+    <LinearLayout
+        android:id="@+id/kumpulan_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/timelineProgress"
+        app:layout_constraintTop_toBottomOf="@+id/timelineProgress"
+        android:layout_marginHorizontal="16dp">
+
+        <Button
+            android:id="@+id/btn_acc_desain"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Acc Desain"
+            android:layout_marginHorizontal="16dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timelineProgress"
+            app:layout_constraintVertical_bias="0.039" />
+
+        <Button
+            android:id="@+id/btn_revisi"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Revisi"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timelineProgress"
+            app:layout_constraintVertical_bias="0.039" />
+    </LinearLayout>
+
+    <!-- Title Bar -->
+    <TextView
+        android:id="@+id/tvTitleProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Status Pengerjaan"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kumpulan_btn" />
+
+    <LinearLayout
+        android:id="@+id/statusPekerjaanContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitleProgress">
+
+        <!-- Status Item -->
+        <LinearLayout
+            android:id="@+id/konfirmasiTransaksi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_gray" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Konfirmasi Transaksi - Sabtu, 25 Jun"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Konfirmasi Transaksi - Sabtu, 25 Jun"
+                android:textColor="@color/gray"
+                android:layout_marginStart="27dp"/>
+        </LinearLayout>
+
+        <!-- Status Item -->
+        <LinearLayout
+            android:id="@+id/desainDanPengerjaan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_gray" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Desain dan Pengerjaan - Selasa, 28 Jun"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Konfirmasi Transaksi - Sabtu, 25 Jun"
+                android:textColor="@color/gray"
+                android:layout_marginStart="27dp"/>
+        </LinearLayout>
+
+        <!-- Status Item -->
+        <LinearLayout
+            android:id="@+id/pengecekanUlang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_gray" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pengecekan Ulang - Rabu, 29 Jun"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Konfirmasi Transaksi - Sabtu, 25 Jun"
+                android:textColor="@color/gray"
+                android:layout_marginStart="27dp"/>
+        </LinearLayout>
+
+        <!-- Status Item -->
+        <LinearLayout
+            android:id="@+id/menungguKonfirmasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_gray" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ulasan - Kamis, 30 Jun"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Konfirmasi Transaksi - Sabtu, 25 Jun"
+                android:textColor="@color/gray"
+                android:layout_marginStart="27dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

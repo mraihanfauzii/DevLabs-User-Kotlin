@@ -44,7 +44,6 @@ class ProgressViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _projectDataById.value = response.body()?.data
                 } else {
-                    _projectDataById.value = response.body()?.data
                     // Handle non-successful response cases
                     Log.e("ProgressViewModel", "onFailure: ${response.errorBody()?.string()}")
                     _errorMessage.value = "Failed to get project data by id"
@@ -54,7 +53,7 @@ class ProgressViewModel : ViewModel() {
             override fun onFailure(call: Call<ApiResponse<List<Project>>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("ProgressViewModel", "onFailure: ${t.message.toString()}")
-                _errorMessage.value = "testt"
+                _errorMessage.value = "Failed to get project data by id"
             }
         })
     }
